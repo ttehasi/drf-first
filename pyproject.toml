@@ -15,4 +15,5 @@ dependencies = [
     "pillow>=11.3.0",
     "drf-yasg>=1.21.11",
     "gunicorn>=23.0.0",
+    "django-jazzmin>=3.0.1",
 ]

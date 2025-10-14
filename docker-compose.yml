@@ -1,0 +1,106 @@
+version: '3.9'
+services:
+  django:
+    build:
+      context: ./web
+    image: app
+    restart: unless-stopped
+    command: >
+      sh -c "while ! nc -z db 5432; do echo 'Waiting for Postgres Database Startup' & sleep 1; done;
+             python manage.py migrate &&
+             python manage.py compilemessages --locale=ru &&
+             python manage.py collectstatic --noinput &&
+             gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - static:/app/static/
+      - media:/app/media/
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+        db:
+          condition: service_healthy
+
+  db:
+    image: postgres:15
+    restart: unless-stopped
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${NAMEDB}
+      POSTGRES_USER: ${USERDB}
+      POSTGRES_PASSWORD: ${PASSWORDDB}
+    env_file:
+      - .env
+    healthcheck:
+      test: /usr/bin/pg_isready
+      interval: 5s
+      timeout: 10s
+      retries: 120
+
+  nginx:
+    build:
+      context: ./nginx
+    restart: unless-stopped
+    volumes:
+      - static:/app/static/
+      - media:/app/media/
+    ports:
+      - "80:80"
+    depends_on:
+      - django
+
+  # redis:
+  #   image: redis:7.0
+  #   restart: unless-stopped
+  #   ports:
+  #     - "6379:6379"
+  #   volumes:
+  #     - redis_data:/data
+  #     - ./redis.conf:/usr/local/etc/redis/redis.conf
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     REDIS_PASSWORD: password
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "redis-cli -a password ping"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+
+  # celery:
+  #   build:
+  #     context: ./django_folder
+  #   #image: app
+  #   restart: unless-stopped
+  #   command: celery -A config worker --loglevel=info
+  #   volumes:
+  #     - static:/app/static/
+  #     - media:/app/media/
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - db
+  #     - redis
+
+  # celery-beat:
+  #   build:
+  #     context: ./django_folder
+  #   restart: unless-stopped
+  #   command: celery -A config beat --loglevel=info
+  #   volumes:
+  #     - static:/app/static/
+  #     - media:/app/media/
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - redis
+
+
+volumes:
+  db:
+  static:
+  media:
+  # redis_data:
