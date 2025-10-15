@@ -10,7 +10,7 @@ services:
              python manage.py migrate &&
              python manage.py compilemessages --locale=ru &&
              python manage.py collectstatic --noinput &&
-             gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+             gunicorn -w 4 --bind 0.0.0.0:8000 app.wsgi:application"
     volumes:
       - static:/app/static/
       - media:/app/media/
@@ -47,7 +47,7 @@ services:
       - static:/app/static/
       - media:/app/media/
     ports:
-      - "80:80"
+      - "80:80"  # на локалке будет 8000:80 (внешний на машине:внутренний в контейнере)
     depends_on:
       - django
 
