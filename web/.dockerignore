@@ -1,0 +1,59 @@
+# Виртуальные окружения
+.venv/
+__pypackages__/
+venv/
+env/
+
+# Python кэш
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.so
+.Python
+
+# Файлы зависимостей (кроме pyproject.toml и uv.lock)
+requirements*.txt
+setup.py
+setup.cfg
+
+# Django
+*.sqlite3
+db.sqlite3
+
+# Статика и медиа (собираются в рантайме)
+staticfiles/
+media/
+
+# Логи
+*.log
+logs/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Docker файлы самой папки django
+Dockerfile
+.dockerignore
+
+# Тесты и coverage
+.coverage
+htmlcov/
+.pytest_cache/
+tox.ini
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Файлы сборки
+dist/
+build/
+*.egg-info/

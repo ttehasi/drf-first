@@ -1,0 +1,23 @@
+# Конфиги кроме нужных
+*.conf
+!nginx.conf
+
+# Логи (создаются в контейнере)
+*.log
+
+# SSL сертификаты (если не используем)
+certs/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
