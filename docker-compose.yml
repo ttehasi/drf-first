@@ -12,7 +12,7 @@ services:
              python manage.py collectstatic --noinput &&
              gunicorn -w 4 --bind 0.0.0.0:8000 app.wsgi:application"
     volumes:
-      - static:/app/static/
+      - static:/app/staticfiles/
       - media:/app/media/
     env_file:
       - .env
@@ -44,10 +44,10 @@ services:
       context: ./nginx
     restart: unless-stopped
     volumes:
-      - static:/app/static/
+      - static:/app/staticfiles/
       - media:/app/media/
     ports:
-      - "80:80"  # на локалке будет 8000:80 (внешний на машине:внутренний в контейнере)
+      - "8080:80"  # на локалке будет 8080:80, 80:80 на проде (внешний на машине:внутренний в контейнере)
     depends_on:
       - django
 
