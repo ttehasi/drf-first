@@ -15,3 +15,6 @@ start:
 
 collectstatic:
 	uv run python manage.py collectstatic
+
+loaddb: migrate
+	uv run python manage.py loaddata yard_control_data user_data
