@@ -1,7 +1,5 @@
 from django.db import models
 
-from app.users.models import User
-
 
 # Create your models here.
 class Yard(models.Model):
@@ -90,3 +88,49 @@ class Invite(models.Model):
         
     def __str__(self):
         return self.user
+    
+    
+class EntryHistory(models.Model):
+    yard = models.ForeignKey(
+        Yard,
+        on_delete=models.PROTECT,
+        related_name='entry_history',
+        verbose_name='какого двора история',
+    )
+    auto = models.ForeignKey(
+        Automobile,
+        verbose_name='авто', 
+        on_delete=models.PROTECT
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'entryhistories'
+        verbose_name = 'Истроия въездов'
+        verbose_name_plural = 'Истрории въездов'
+
+    def __str__(self):
+        return self.auto.auto_number
+    
+
+class OutHistory(models.Model):
+    yard = models.ForeignKey(
+        Yard,
+        on_delete=models.PROTECT,
+        related_name='out_history',
+        verbose_name='какого двора история',
+    )
+    auto = models.ForeignKey(
+        Automobile,
+        verbose_name='авто', 
+        on_delete=models.PROTECT
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'outhistories'
+        verbose_name = 'Истроия выездов'
+        verbose_name_plural = 'Истрории выездов'
+
+    def __str__(self):
+        return self.auto.auto_number

@@ -3,9 +3,12 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-    admin = models.BooleanField(null=True)
+    admin = models.BooleanField(default=False)
     phone = models.CharField(verbose_name='Телефон', unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def get_full_name(self):
+        return super().get_full_name()
     
     class Meta:
         db_table = 'users'

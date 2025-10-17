@@ -3,7 +3,9 @@ from .models import (
     Yard,
     BlackList,
     Invite,
-    Automobile
+    Automobile,
+    EntryHistory,
+    OutHistory
 )
 
 # Register your models here.
@@ -25,3 +27,13 @@ class AutomobileAdmin(admin.ModelAdmin):
 @admin.register(Invite)
 class InviteAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'yard', 'created_at']
+    
+
+@admin.register(EntryHistory)
+class EntryHistoryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'yard', 'auto', 'created_at']
+    
+    
+@admin.register(OutHistory)
+class OutHistoryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'yard', 'auto', 'created_at']
