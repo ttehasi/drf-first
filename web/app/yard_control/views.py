@@ -1,12 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from datetime import datetime, timedelta
 from .models import(
     EntryHistory,
     OutHistory
 )
 
-from .serializers import CombinedHistorySerializer
+from .serializers import CombinedHistorySerializer, AutomobileSerializer
 
 class CombinedHistoryView(APIView):
     def get(self, request):
@@ -75,3 +76,12 @@ class CombinedHistoryView(APIView):
         serializer = CombinedHistorySerializer(combined_history, many=True)
         
         return Response(serializer.data)
+    
+    
+class AutomobileCreateAPIView(APIView):
+    def post(self, request): # нужно еще добавить таску на expires at
+        serializer = AutomobileSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

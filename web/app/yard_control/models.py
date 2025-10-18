@@ -55,7 +55,7 @@ class Automobile(models.Model):
         related_name='automobiles',
         verbose_name='Владелец',
     )
-    expires_at = models.DateTimeField(verbose_name='Временный доступ')
+    expires_at = models.DateTimeField(verbose_name='Временный доступ', null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
     class Meta:

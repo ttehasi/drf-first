@@ -44,3 +44,14 @@ class CombinedHistorySerializer(serializers.Serializer):
     
     class Meta:
         fields = ['event_type', 'created_at', 'auto', 'yard']
+        
+        
+class AutomobileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Automobile
+        fields = ['id', 'auto_number', 'is_confirmed', 'owner']
+
+    def validate_auto_number(self, value):
+        if not value:
+            raise serializers.ValidationError("Автомобильный номер обязателен")
+        return value.upper()

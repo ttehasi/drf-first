@@ -21,12 +21,6 @@ class User(AbstractUser):
 
 class Guest(models.Model):
     auto_number = models.CharField(max_length=8, unique=True, verbose_name='автомобильный номер')
-    invite_by = models.ForeignKey(
-        User,
-        on_delete=models.PROTECT,
-        related_name='guests',
-        verbose_name='Админ',
-    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -39,9 +33,9 @@ class Guest(models.Model):
         
         
 class GuestEntry(models.Model):
-    entry_timeout = models.DateTimeField()
-    enter_time = models.DateTimeField()
-    out_time = models.DateTimeField()
+    entry_timeout = models.DateTimeField(null=True)
+    enter_time = models.DateTimeField(null=True)
+    out_time = models.DateTimeField(null=True)
     guest = models.ForeignKey(
         Guest,
         on_delete=models.PROTECT,
@@ -54,12 +48,19 @@ class GuestEntry(models.Model):
         related_name='guestentries',
         verbose_name='двор',
     )
+    invite_by = models.ForeignKey(
+        User,
+        on_delete=models.PROTECT,
+        related_name='guests',
+        verbose_name='Пригласивший',
+        null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         db_table = 'guestentries'
-        verbose_name = 'Гостевого входа'
-        verbose_name_plural = 'Гостевые входы'
+        verbose_name = 'Гостевой заявки'
+        verbose_name_plural = 'Гостевые заявки'
         
     def __str__(self):
         return self.guest
