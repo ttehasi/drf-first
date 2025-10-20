@@ -46,7 +46,7 @@ class CombinedHistorySerializer(serializers.Serializer):
         fields = ['event_type', 'created_at', 'auto', 'yard']
         
         
-class AutomobileSerializer(serializers.ModelSerializer):
+class AutomobileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Automobile
         fields = ['id', 'auto_number', 'is_confirmed', 'owner']
@@ -55,3 +55,27 @@ class AutomobileSerializer(serializers.ModelSerializer):
         if not value:
             raise serializers.ValidationError("Автомобильный номер обязателен")
         return value.upper()
+
+
+class CombinedHistoryCreateSerializer(serializers.Serializer):
+    event_type = serializers.CharField()
+    auto_number = serializers.CharField()
+    yard_id = serializers.IntegerField()
+    
+    class Meta:
+        fields = ['event_type', 'auto_number', 'yard_id']
+        
+    def validate_event_type(self, value):
+        if value not in ['exit', 'entry']:
+            raise serializers.ValidationError('event_type может быть только "exit" или "entry"')
+        return value
+        
+    def validate_auto_number(self, value):
+        if not value:
+            raise serializers.ValidationError("Автомобильный номер обязателен")
+        return value.upper()
+        
+    def validate_yard_id(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("yard_id должен быть положительным числом")
+        return value
