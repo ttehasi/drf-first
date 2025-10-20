@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from django.db import transaction
 from datetime import datetime, timedelta
 from .models import(
@@ -12,7 +12,7 @@ from .models import(
 
 from .serializers import (
     CombinedHistorySerializer,
-    AutomobileSerializer,
+    AutomobileNumberSerializer,
     AutomobileCreateSerializer,
     CombinedHistoryCreateSerializer
 )
@@ -87,6 +87,7 @@ class CombinedHistoryView(APIView):
 
 
     def post(self, request):
+        
         serializer = CombinedHistoryCreateSerializer(data=request.data)
         
         if not serializer.is_valid():
@@ -157,4 +158,12 @@ class AutomobileCreateAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
+class AutoNumberAPIView(generics.ListAPIView):
+    serializer_class = AutomobileNumberSerializer
+    def list(self, request, *args, **kwargs):
+        queryset = Automobile.objects.all()
+        serializer = self.get_serializer(queryset, many=True)
+        response = {
+            'auto_numbers': serializer.data
+        }
+        return Response(response)

@@ -4,7 +4,7 @@ from .models import EntryHistory, OutHistory, Automobile, Yard
 class AutomobileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Automobile
-        fields = ['id', 'auto_number']
+        fields = ['id', 'auto_number', 'owner', 'expires_at']
 
 class YardSerializer(serializers.ModelSerializer):
     class Meta:
@@ -79,3 +79,9 @@ class CombinedHistoryCreateSerializer(serializers.Serializer):
         if value <= 0:
             raise serializers.ValidationError("yard_id должен быть положительным числом")
         return value
+    
+    
+class AutomobileNumberSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Automobile
+        fields = ['auto_number']
