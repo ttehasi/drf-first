@@ -51,56 +51,56 @@ services:
     depends_on:
       - django
 
-  # redis:
-  #   image: redis:7.0
-  #   restart: unless-stopped
-  #   ports:
-  #     - "6379:6379"
-  #   volumes:
-  #     - redis_data:/data
-  #     - ./redis.conf:/usr/local/etc/redis/redis.conf
-  #   env_file:
-  #     - .env
+  redis:
+    image: redis:7.0
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+      - ./redis.conf:/usr/local/etc/redis/redis.conf
+    env_file:
+      - .env
   #   environment:
-  #     REDIS_PASSWORD: password
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "redis-cli -a password ping"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
+      # REDIS_PASSWORD: ${REDIS_PASSWORD}
+    # healthcheck:
+    #   test: ["CMD-SHELL", "redis-cli -a password ping"]
+    #   interval: 10s
+    #   timeout: 5s
+    #   retries: 5
+    command: ["redis-server", "/usr/local/etc/redis/redis.conf"]
 
-  # celery:
-  #   build:
-  #     context: ./django_folder
-  #   #image: app
-  #   restart: unless-stopped
-  #   command: celery -A config worker --loglevel=info
-  #   volumes:
-  #     - static:/app/static/
-  #     - media:/app/media/
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - db
-  #     - redis
+  celery:
+    build:
+      context: ./web
+    #image: app
+    restart: unless-stopped
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - static:/app/staticfiles/
+      - media:/app/media/
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
 
-  # celery-beat:
-  #   build:
-  #     context: ./django_folder
-  #   restart: unless-stopped
-  #   command: celery -A config beat --loglevel=info
-  #   volumes:
-  #     - static:/app/static/
-  #     - media:/app/media/
-  #   env_file:
-  #     - .env
-  #   depends_on:
-  #     - redis
+  celery-beat:
+    build:
+      context: ./web
+    restart: unless-stopped
+    command: celery -A config beat --loglevel=info
+    volumes:
+      - static:/app/staticfiles/
+      - media:/app/media/
+    env_file:
+      - .env
+    depends_on:
+      - redis
 
 
 volumes:
   db:
   static:
   media:
-  # redis_data:
+  redis_data:
