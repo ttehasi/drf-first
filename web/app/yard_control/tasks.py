@@ -9,7 +9,7 @@ from .models import (
 
 
 @shared_task(bind=True, max_retries=3)
-def check_automobile_confirmation(self, automobile_id, yard_id):
+def check_automobile_confirmation(self, automobile_id, yard_id=None):
     try:
         from .models import Automobile
         
@@ -69,26 +69,25 @@ def calculate_days_in_courtyard(automobile, yard_id):
     except Exception as e:
         raise ValueError('Что-то при подсчете дней пошло не так')
 
-@shared_task
-def check_all_pending_automobiles():
-    try:
-        from .models import Automobile
+# @shared_task  # надо как-то пердать yard_id
+# def check_all_pending_automobiles():
+#     try:
+#         from .models import Automobile
         
-        now = timezone.now()
-        # Ищем автомобили, у которых истек expires_at и они не подтверждены
-        expired_automobiles = Automobile.objects.filter(
-            expires_at__lte=now,
-            is_confirmed=False
-        )
+#         now = timezone.now()
+#         # Ищем автомобили, у которых истек expires_at и они не подтверждены
+#         expired_automobiles = Automobile.objects.filter(
+#             expires_at__lte=now,
+#             is_confirmed=False
+#         )
         
-        checked_count = 0
-        for automobile in expired_automobiles:
-            # Запускаем задачу для каждого автомобиля
-            # Без проверок в кэше - пусть сама задача разберется
-            check_automobile_confirmation.delay(automobile.id)
-            checked_count += 1
+#         checked_count = 0
+#         for automobile in expired_automobiles:
+#             # Запускаем задачу для каждого автомобиля
+#             check_automobile_confirmation.delay(automobile.id)
+#             checked_count += 1
         
-        return f"Обработано {checked_count} автомобилей"
+#         return f"Обработано {checked_count} автомобилей"
         
-    except Exception as e:
-        return f"Ошибка: {str(e)}"
+#     except Exception as e:
+#         return f"Ошибка: {str(e)}"
