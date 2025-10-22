@@ -21,7 +21,7 @@ class YardAddressSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Yard
-        fields = ['address', 'automobiles']
+        fields = ['id', 'address', 'automobiles']
     
     def get_automobiles(self, obj):
         user = self.context.get('user')
@@ -48,7 +48,7 @@ class AccountDetailSerializer(serializers.ModelSerializer):
         for yard_data in serializer.data:
             address = yard_data['address']
             automobiles = [auto['auto_number'] for auto in yard_data['automobiles']]
-            addresses_dict[address] = automobiles
+            addresses_dict[address] = {'auto_numbers': automobiles, 'yard_id': yard_data['id']}
         
         return addresses_dict
 

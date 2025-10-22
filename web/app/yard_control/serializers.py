@@ -47,9 +47,11 @@ class CombinedHistorySerializer(serializers.Serializer):
         
         
 class AutomobileCreateSerializer(serializers.ModelSerializer):
+    yard_id = serializers.ImageField()
+    
     class Meta:
         model = Automobile
-        fields = ['id', 'auto_number', 'is_confirmed', 'owner']
+        fields = ['auto_number', 'owner', 'yard_id']
 
     def validate_auto_number(self, value):
         if not value:

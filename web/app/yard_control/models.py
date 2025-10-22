@@ -1,7 +1,27 @@
 from django.db import models
 
 
-# Create your models here.
+class Automobile(models.Model):
+    auto_number = models.CharField(max_length=8, unique=True, verbose_name='автомобильный номер')
+    is_confirmed = models.BooleanField(verbose_name='Подтверждена', default=False)
+    owner = models.ForeignKey(
+        'users.User',
+        on_delete=models.PROTECT,
+        related_name='automobiles',
+        verbose_name='Владелец',
+    )
+    expires_at = models.DateTimeField(verbose_name='Временный доступ', null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = 'automobiles'
+        verbose_name = 'Автомобиля'
+        verbose_name_plural = 'Автомобили'
+        
+    def __str__(self):
+        return self.auto_number
+
+
 class Yard(models.Model):
     address = models.CharField(max_length=50, unique=True, verbose_name='адрес')
     admin = models.ForeignKey(
@@ -14,6 +34,12 @@ class Yard(models.Model):
         'users.User',
         verbose_name='Пользователи двора',
         related_name='yards_user',
+        blank=True,
+    )
+    automobiles = models.ManyToManyField(
+        Automobile,
+        verbose_name='Машины двора',
+        related_name='yards_auto',
         blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
@@ -46,25 +72,6 @@ class BlackList(models.Model):
         return self.auto_number
         
         
-class Automobile(models.Model):
-    auto_number = models.CharField(max_length=8, unique=True, verbose_name='автомобильный номер')
-    is_confirmed = models.BooleanField(verbose_name='Подтверждена')
-    owner = models.ForeignKey(
-        'users.User',
-        on_delete=models.PROTECT,
-        related_name='automobiles',
-        verbose_name='Владелец',
-    )
-    expires_at = models.DateTimeField(verbose_name='Временный доступ', null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    
-    class Meta:
-        db_table = 'automobiles'
-        verbose_name = 'Автомобиля'
-        verbose_name_plural = 'Автомобили'
-        
-    def __str__(self):
-        return self.auto_number
         
 class Invite(models.Model):
     user = models.ForeignKey(

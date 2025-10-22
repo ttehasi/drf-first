@@ -186,9 +186,36 @@ if not DEBUG:
     SECURE_CONTENT_TYPE_NOSNIFF = True
     X_FRAME_OPTIONS = 'DENY'
 
-# CELERY_BROKER_URL = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
-# CELERY_RESULT_BACKEND = os.getenv('REDIS_URL', 'redis://localhost:6379/0')
-# CELERY_ACCEPT_CONTENT = ['json']
-# CELERY_TASK_SERIALIZER = 'json'
-# CELERY_RESULT_SERIALIZER = 'json'
-# CELERY_TIMEZONE = 'Europe/Moscow'
+
+CELERY_BEAT_SCHEDULE = {
+    'check-pending-automobiles-daily': {
+        'task': 'automobiles.tasks.check_all_pending_automobiles',
+        'schedule': timedelta(hours=24),  # Запускать каждый день
+    },
+    'cleanup-old-tasks': {
+        'task': 'automobiles.tasks.cleanup_old_tasks',
+        'schedule': timedelta(days=7),
+    },
+}
+
+REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
+REDIS_PORT = os.getenv('REDIS_PORT', 6379)
+REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', None)
+REDIS_DB = os.getenv('REDIS_DB', 0)
+
+REDIS_URL = f'redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
+
+
+CELERY_BROKER_URL = REDIS_URL
+CELERY_RESULT_BACKEND = REDIS_URL
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Europe/Moscow'
+
+CELERY_BEAT_SCHEDULE = {
+    'check-expired-automobiles-daily': {
+        'task': 'automobiles.tasks.check_all_pending_automobiles',
+        'schedule': timedelta(hours=24),
+    },
+}

@@ -2,13 +2,17 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from django.db import transaction
+from django.utils import timezone
 from datetime import datetime, timedelta
+from .tasks import check_automobile_confirmation
 from .models import(
     EntryHistory,
     OutHistory,
     Yard,
     Automobile
 )
+
+from app.users.models import User
 
 from .serializers import (
     CombinedHistorySerializer,
@@ -149,21 +153,96 @@ class CombinedHistoryView(APIView):
             
     
     
+# class AutomobileCreateAPIView(APIView):
+#     def post(self, request): # нужно еще добавить таску на expires at
+#         serializer = AutomobileCreateSerializer(data=request.data)
+#         if serializer.is_valid():
+#             serializer.save()
+#             return Response(serializer.data, status=status.HTTP_201_CREATED)
+#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 class AutomobileCreateAPIView(APIView):
-    def post(self, request): # нужно еще добавить таску на expires at
+    def post(self, request):
         serializer = AutomobileCreateSerializer(data=request.data)
+        
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # Подготавливаем данные для создания
+            validated_data = serializer.validated_data.copy()
+            # validated_data['expires_at'] = timezone.now() + timedelta(days=14)
+            # validated_data['is_confirmed'] = False
+            
+            # Создаем автомобиль
+            automobile = Automobile.objects.create(
+                auto_number=validated_data['auto_number'],
+                owner=validated_data['owner'],
+                expires_at=timezone.now() + timedelta(days=14),
+                is_confirmed=False
+            )
+            
+            # Создаем задачу проверки через 14 дней
+            try:
+                task_result = check_automobile_confirmation.apply_async(
+                    args=[automobile.id, validated_data['yard_id']],
+                    countdown=14 * 24 * 60 * 60  # 14 дней в секундах
+                )
+                
+                
+                # Формируем ответ
+                response_serializer = AutomobileCreateSerializer(automobile)
+                response_data = response_serializer.data
+                response_data['task_id'] = task_result.id
+                response_data['check_date'] = automobile.expires_at.isoformat()
+                
+                return Response(response_data, status=status.HTTP_201_CREATED)
+                
+            except Exception as e:
+                
+                # Все равно возвращаем созданный автомобиль
+                response_serializer = AutomobileCreateSerializer(automobile)
+                return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 class AutoNumberAPIView(generics.ListAPIView):
     serializer_class = AutomobileNumberSerializer
     def list(self, request, *args, **kwargs):
-        queryset = Automobile.objects.all()
-        serializer = self.get_serializer(queryset, many=True)
+        yard_id = request.query_params.get('yard_id')
+        if yard_id:
+            try:
+                queryset = Yard.objects.get(id=yard_id)
+            except Yard.DoesNotExist:
+                return Response({'error': 'двор с таким id не найден'})
+            
+            autos = queryset.automobiles.all()
+            response = {
+                'yard_id': yard_id,
+                'count_auto': autos.count(),
+                'auto_numbers': [auto.auto_number for auto in autos]
+            }
+            return Response(response)
+        queryset = Yard.objects.all()
+        numbers = []
+        for yard in queryset:
+            autos = yard.automobiles.all()
+            auto = [
+                {
+                    'yard_id': yard.id,
+                    'automobiles': [auto.auto_number for auto in autos],
+                    'yard_auto_count': [auto.auto_number for auto in autos].__len__()
+                }
+            ]
+            numbers.append(auto)
         response = {
-            'auto_numbers': serializer.data
+            'count_auto': Automobile.objects.all().count(),
+            'auto_numbers': numbers
         }
         return Response(response)
+        # if yard_id:
+        #     queryset = queryset.filter(=yard_id) # дописать фильтрацию авто по двору
+        # serializer = self.get_serializer(queryset, many=True)
+        # response = {
+        #     'auto_numbers': serializer.data
+        # }
+        # return Response(response)
