@@ -63,4 +63,4 @@ class GuestEntry(models.Model):
         verbose_name_plural = 'Гостевые заявки'
         
     def __str__(self):
-        return self.guest
+        return self.guest.auto_number

@@ -37,10 +37,10 @@ class CurrentGuestEntriesAPIView(generics.ListAPIView):
         now = timezone.now()
         
         queryset = GuestEntry.objects.filter(
-            enter_time__isnull=False,
+            # enter_time__isnull=False,
             out_time__isnull=True
         ).filter(
-            models.Q(entry_timeout__isnull=True) | 
+            # models.Q(entry_timeout__isnull=False) & 
             models.Q(entry_timeout__gte=now)
         ).select_related('guest', 'yard', 'invite_by')
         
