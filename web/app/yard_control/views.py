@@ -176,9 +176,9 @@ class AutomobileCreateAPIView(APIView):
             valid_number = serializer.data['auto_number'].upper()
             # Получаем двор
             try:
-                current_yard = Yard.objects.get(id=serializer.data['yard_id'])
+                current_yards = [Yard.objects.get(id=int(i)) for i in serializer.data['yard_id']]
             except Yard.DoesNotExist:
-                return Response({'error': 'Двора с таким id нет'})
+                return Response({'error': 'Дворов с таким id нет'})
             
             # Получаем владельца
             try:
@@ -188,20 +188,20 @@ class AutomobileCreateAPIView(APIView):
             
             # Создаем или получаем авто
             try:
-                automobile = Automobile.objects.get(auto_number=serializer.data['auto_number'])
+                automobile = Automobile.objects.get(auto_number=valid_number)
             except Automobile.DoesNotExist:
                 automobile = Automobile.objects.create(
-                    auto_number=serializer.data['auto_number'],
+                    auto_number=valid_number,
                     owner=owner,
                     expires_at=timezone.now() + timedelta(days=14),
                     is_confirmed=False
                 )
-                
-            yard_automobiles = current_yard.automobiles.all()
-            if automobile in yard_automobiles:
-                return Response({'error': 'Этот автомобиль уже есть в этом дворе'})
+            for yard in current_yards:
+                yard_automobiles = yard.automobiles.all()
+                if automobile in yard_automobiles:
+                    return Response({'error': 'Этот автомобиль уже есть в этом дворе'})
 
-            current_yard.automobiles.add(automobile)
+                yard.automobiles.add(automobile)
             # except IntegrityError:
             #     return Response({'error': 'Автомобиль с таким номером уже есть'})
             # Создаем задачу проверки через 14 дней

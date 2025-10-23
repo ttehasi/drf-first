@@ -47,7 +47,7 @@ class CombinedHistorySerializer(serializers.Serializer):
         
         
 class AutomobileCreateSerializer(serializers.Serializer):
-    yard_id = serializers.IntegerField()
+    yard_id = serializers.ListField()
     auto_number = serializers.CharField()
     owner = serializers.IntegerField()
     
