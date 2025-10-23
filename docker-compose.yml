@@ -3,7 +3,8 @@ services:
   django:
     build:
       context: ./web
-    image: app
+    # container_name: django_app
+    # image: app
     restart: unless-stopped
     command: >
       sh -c "while ! nc -z db 5432; do echo 'Waiting for Postgres Database Startup' & sleep 1; done;
@@ -75,7 +76,7 @@ services:
       context: ./web
     #image: app
     restart: unless-stopped
-    command: celery -A config worker --loglevel=info
+    command: celery -A app worker --loglevel=info
     volumes:
       - static:/app/staticfiles/
       - media:/app/media/
@@ -89,7 +90,7 @@ services:
     build:
       context: ./web
     restart: unless-stopped
-    command: celery -A config beat --loglevel=info
+    command: celery -A app beat --loglevel=info
     volumes:
       - static:/app/staticfiles/
       - media:/app/media/
