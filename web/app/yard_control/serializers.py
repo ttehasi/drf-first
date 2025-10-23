@@ -46,17 +46,19 @@ class CombinedHistorySerializer(serializers.Serializer):
         fields = ['event_type', 'created_at', 'auto', 'yard']
         
         
-class AutomobileCreateSerializer(serializers.ModelSerializer):
-    yard_id = serializers.ImageField()
+class AutomobileCreateSerializer(serializers.Serializer):
+    yard_id = serializers.IntegerField()
+    auto_number = serializers.CharField()
+    owner = serializers.IntegerField()
     
     class Meta:
-        model = Automobile
+        # model = Automobile
         fields = ['auto_number', 'owner', 'yard_id']
 
-    def validate_auto_number(self, value):
-        if not value:
-            raise serializers.ValidationError("Автомобильный номер обязателен")
-        return value.upper()
+    # def validate_auto_number(self, value):
+    #     if not value:
+    #         raise serializers.ValidationError("Автомобильный номер обязателен")
+    #     return value.upper()
 
 
 class CombinedHistoryCreateSerializer(serializers.Serializer):

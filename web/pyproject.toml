@@ -19,4 +19,5 @@ dependencies = [
     "ruff>=0.14.1",
     "pytz>=2025.2",
     "celery>=5.5.3",
+    "redis>=7.0.0",
 ]

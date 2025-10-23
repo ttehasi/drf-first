@@ -61,10 +61,10 @@ def calculate_days_in_courtyard(automobile, yard_id):
         return (out_history + entry_history) // 2 # Надо еще дописать логику подсчета ночей 
         
         
-        import random
-        days_count = random.randint(8, 14)  # Для тестирования разных сценариев
+        # import random
+        # days_count = random.randint(8, 14)  # Для тестирования разных сценариев
         
-        return days_count
+        # return days_count
         
     except Exception as e:
         raise ValueError('Что-то при подсчете дней пошло не так')

@@ -187,17 +187,6 @@ if not DEBUG:
     X_FRAME_OPTIONS = 'DENY'
 
 
-CELERY_BEAT_SCHEDULE = {
-    'check-pending-automobiles-daily': {
-        'task': 'automobiles.tasks.check_all_pending_automobiles',
-        'schedule': timedelta(hours=24),  # Запускать каждый день
-    },
-    'cleanup-old-tasks': {
-        'task': 'automobiles.tasks.cleanup_old_tasks',
-        'schedule': timedelta(days=7),
-    },
-}
-
 REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
 REDIS_PORT = os.getenv('REDIS_PORT', 6379)
 REDIS_PASSWORD = os.getenv('REDIS_PASSWORD', None)

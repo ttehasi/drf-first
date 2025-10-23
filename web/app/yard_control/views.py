@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 from django.db import transaction
 from django.utils import timezone
+from django.db.utils import IntegrityError
 from datetime import datetime, timedelta
 from .tasks import check_automobile_confirmation
 from .models import(
@@ -165,42 +166,75 @@ class CombinedHistoryView(APIView):
 class AutomobileCreateAPIView(APIView):
     def post(self, request):
         serializer = AutomobileCreateSerializer(data=request.data)
-        
+        # if serializer.is_valid():
+        #     return Response({'ee': 12})
+        # return Response({121: serializer.error_messages})
         if serializer.is_valid():
             # Подготавливаем данные для создания
-            validated_data = serializer.validated_data.copy()
             # validated_data['expires_at'] = timezone.now() + timedelta(days=14)
             # validated_data['is_confirmed'] = False
+            valid_number = serializer.data['auto_number'].upper()
+            # Получаем двор
+            try:
+                current_yard = Yard.objects.get(id=serializer.data['yard_id'])
+            except Yard.DoesNotExist:
+                return Response({'error': 'Двора с таким id нет'})
             
-            # Создаем автомобиль
-            automobile = Automobile.objects.create(
-                auto_number=validated_data['auto_number'],
-                owner=validated_data['owner'],
-                expires_at=timezone.now() + timedelta(days=14),
-                is_confirmed=False
-            )
+            # Получаем владельца
+            try:
+                owner = User.objects.get(id=serializer.data['owner'])
+            except User.DoesNotExist:
+                Response({'error': 'Владелец с таким id не найден'})
             
+            # Создаем или получаем авто
+            try:
+                automobile = Automobile.objects.get(auto_number=serializer.data['auto_number'])
+            except Automobile.DoesNotExist:
+                automobile = Automobile.objects.create(
+                    auto_number=serializer.data['auto_number'],
+                    owner=owner,
+                    expires_at=timezone.now() + timedelta(days=14),
+                    is_confirmed=False
+                )
+                
+            yard_automobiles = current_yard.automobiles.all()
+            if automobile in yard_automobiles:
+                return Response({'error': 'Этот автомобиль уже есть в этом дворе'})
+
+            current_yard.automobiles.add(automobile)
+            # except IntegrityError:
+            #     return Response({'error': 'Автомобиль с таким номером уже есть'})
             # Создаем задачу проверки через 14 дней
             try:
                 task_result = check_automobile_confirmation.apply_async(
-                    args=[automobile.id, validated_data['yard_id']],
+                    args=[automobile.id, serializer.data['yard_id']],
                     countdown=14 * 24 * 60 * 60  # 14 дней в секундах
                 )
                 
                 
                 # Формируем ответ
-                response_serializer = AutomobileCreateSerializer(automobile)
-                response_data = response_serializer.data
+                response_data = {
+                    'auto_number': automobile.auto_number,
+                    'owner': automobile.owner.id,
+                    'add_to_yard_id': serializer.data['yard_id'],
+                }
+                # response_serializer = AutomobileCreateSerializer(automobile)
+                # response_data = response_serializer.data
                 response_data['task_id'] = task_result.id
                 response_data['check_date'] = automobile.expires_at.isoformat()
                 
                 return Response(response_data, status=status.HTTP_201_CREATED)
                 
             except Exception as e:
-                
                 # Все равно возвращаем созданный автомобиль
-                response_serializer = AutomobileCreateSerializer(automobile)
-                return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+                # response_serializer = AutomobileCreateSerializer(automobile)
+                response_data = {
+                    'auto_number': automobile.auto_number,
+                    'owner': automobile.owner.id,
+                    'add_to_yard_id': serializer.data['yard_id'],
+                    'mess': 'Таска на проверку временного доступа не создана, но авто добавлено'
+                }
+                return Response(response_data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
