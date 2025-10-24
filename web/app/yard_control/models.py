@@ -2,7 +2,7 @@ from django.db import models
 
 
 class Automobile(models.Model):
-    auto_number = models.CharField(max_length=8, unique=True, verbose_name='автомобильный номер')
+    auto_number = models.CharField(max_length=9, unique=True, verbose_name='автомобильный номер')
     is_confirmed = models.BooleanField(verbose_name='Подтверждена', default=False)
     owner = models.ForeignKey(
         'users.User',
