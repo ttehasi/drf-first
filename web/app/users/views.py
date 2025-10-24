@@ -34,7 +34,7 @@ class CurrentGuestEntriesAPIView(generics.ListAPIView):
     serializer_class = GuestEntrySerializer
     
     def get_queryset(self):
-        now = timezone.now()
+        now = timezone.localtime(timezone.now())
         
         queryset = GuestEntry.objects.filter(
             # enter_time__isnull=False,
@@ -68,7 +68,7 @@ class CurrentGuestEntriesAPIView(generics.ListAPIView):
             
             response_data = {
                 'count': queryset.count(),
-                'current_time': timezone.now().isoformat(),
+                'current_time': timezone.localtime(timezone.now()).isoformat(),
                 'active_guests': serializer.data
             }
             
