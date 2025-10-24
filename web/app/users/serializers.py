@@ -8,6 +8,8 @@ from app.yard_control.models import (
     Yard,
     Automobile,
 )
+from rest_framework.response import Response
+from django.db.utils import IntegrityError
 
 
 class AutomobileSerializer(serializers.ModelSerializer):
@@ -93,6 +95,14 @@ class GuestEntryCreateSerializer(serializers.ModelSerializer):
             auto_number=guest_auto_number,
             defaults={'auto_number': guest_auto_number}
         )
+        
+        try:
+            auto, created_auto = Automobile.objects.get_or_create(
+                auto_number=guest_auto_number,
+                is_guest=True,
+            )
+        except IntegrityError:
+            raise serializers.ValidationError({'error': 'У этой машины уже есть доступ в этот двор'})
         
         try:
             yard = Yard.objects.get(id=yard_id)

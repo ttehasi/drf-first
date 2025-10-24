@@ -20,7 +20,7 @@ class User(AbstractUser):
         
 
 class Guest(models.Model):
-    auto_number = models.CharField(max_length=8, unique=True, verbose_name='автомобильный номер')
+    auto_number = models.CharField(max_length=9, unique=True, verbose_name='автомобильный номер')
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
 
     class Meta:

@@ -10,10 +10,14 @@ from .models import(
     EntryHistory,
     OutHistory,
     Yard,
-    Automobile
+    Automobile,
 )
 
-from app.users.models import User
+from app.users.models import (
+    User, 
+    GuestEntry,
+    Guest
+)
 
 from .serializers import (
     CombinedHistorySerializer,
@@ -94,7 +98,7 @@ class CombinedHistoryView(APIView):
     def post(self, request):
         
         serializer = CombinedHistoryCreateSerializer(data=request.data)
-        
+        now = timezone.localtime(timezone.now())
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
@@ -120,6 +124,13 @@ class CombinedHistoryView(APIView):
                     )
                 
                 if event_type == 'entry':
+                    if auto.is_guest:
+                        guest = Guest.objects.get(auto_number=auto_number)
+                        guest_entry = GuestEntry.objects.get(guest=guest,
+                                                             enter_time__isnull=True,
+                                                             entry_timeout__gte=now)
+                        guest_entry.enter_time = now
+                        guest_entry.save()
                     history_entry = EntryHistory.objects.create(
                         yard=yard,
                         auto=auto
@@ -132,6 +143,13 @@ class CombinedHistoryView(APIView):
                         'created_at': history_entry.created_at
                     }
                 else:  # exit
+                    if auto.is_guest:
+                        guest = Guest.objects.get(auto_number=auto_number)
+                        guest_entry = GuestEntry.objects.get(guest=guest,
+                                                             out_time__isnull=True,
+                                                             entry_timeout__gte=now)
+                        guest_entry.out_time = now
+                        guest_entry.save()
                     history_entry = OutHistory.objects.create(
                         yard=yard,
                         auto=auto

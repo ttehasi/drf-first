@@ -4,11 +4,14 @@ from django.db import models
 class Automobile(models.Model):
     auto_number = models.CharField(max_length=9, unique=True, verbose_name='автомобильный номер')
     is_confirmed = models.BooleanField(verbose_name='Подтверждена', default=False)
+    is_guest = models.BooleanField(verbose_name='Гостевое авто', default=False)
     owner = models.ForeignKey(
         'users.User',
         on_delete=models.PROTECT,
         related_name='automobiles',
         verbose_name='Владелец',
+        null=True,
+        blank=True
     )
     expires_at = models.DateTimeField(verbose_name='Временный доступ', null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
@@ -54,7 +57,7 @@ class Yard(models.Model):
         
         
 class BlackList(models.Model):
-    auto_number = models.CharField(max_length=8, unique=True, verbose_name='автомобильный номер')
+    auto_number = models.CharField(max_length=9, unique=True, verbose_name='автомобильный номер')
     yard = models.OneToOneField(
         Yard,
         on_delete=models.CASCADE,

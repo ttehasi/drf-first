@@ -5,6 +5,11 @@ from .models import (
     GuestEntry
 )
 
+from app.yard_control.models import (
+    OutHistory,
+    EntryHistory
+)
+
 # Register your models here.
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
@@ -13,7 +18,15 @@ class UserAdmin(admin.ModelAdmin):
     
 @admin.register(Guest)
 class GuestAdmin(admin.ModelAdmin):
-    list_display = ['id', 'auto_number', 'created_at']
+    # average_time_entry = admin.
+    list_display = ['id', 'auto_number', 'created_at', ]
+    
+    # def average_time_entry(self, obj):
+    #     entry_queryset = EntryHistory.objects.filter(auto_number=obj.auto_number)
+    #     out_queryset = OutHistory.objects.filter(auto=obj.auto_number)
+    #     return str(type(out_queryset))
+    
+    # average_time_entry.short_description = 'Среднее время посещения'
     
     
 @admin.register(GuestEntry)
