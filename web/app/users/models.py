@@ -3,9 +3,9 @@ from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
 class User(AbstractUser):
-    admin = models.BooleanField(default=False)
+    admin = models.BooleanField(default=False, verbose_name='статус админа')
     phone = models.CharField(verbose_name='Телефон', unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     
     def get_full_name(self):
         return super().get_full_name()
@@ -21,7 +21,7 @@ class User(AbstractUser):
 
 class Guest(models.Model):
     auto_number = models.CharField(max_length=8, unique=True, verbose_name='автомобильный номер')
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
 
     class Meta:
         db_table = 'guests'
@@ -33,9 +33,9 @@ class Guest(models.Model):
         
         
 class GuestEntry(models.Model):
-    entry_timeout = models.DateTimeField(null=True)
-    enter_time = models.DateTimeField(null=True)
-    out_time = models.DateTimeField(null=True)
+    entry_timeout = models.DateTimeField(null=True, verbose_name='таймаут на въезд')
+    enter_time = models.DateTimeField(null=True, verbose_name='время заезда')
+    out_time = models.DateTimeField(null=True, verbose_name='время выезда')
     guest = models.ForeignKey(
         Guest,
         on_delete=models.PROTECT,
@@ -55,7 +55,7 @@ class GuestEntry(models.Model):
         verbose_name='Пригласивший',
         null=True
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
 
     class Meta:
         db_table = 'guestentries'

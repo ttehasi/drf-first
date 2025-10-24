@@ -11,7 +11,7 @@ class Automobile(models.Model):
         verbose_name='Владелец',
     )
     expires_at = models.DateTimeField(verbose_name='Временный доступ', null=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     
     class Meta:
         db_table = 'automobiles'
@@ -42,7 +42,7 @@ class Yard(models.Model):
         related_name='yards_auto',
         blank=True,
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
 
     class Meta:
         db_table = 'yards'
@@ -61,7 +61,7 @@ class BlackList(models.Model):
         verbose_name='черный список двора',
         null=True
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     
     class Meta:
         db_table = 'blacklists'
@@ -86,7 +86,7 @@ class Invite(models.Model):
         related_name='invites',
         verbose_name='в какой двор приглашение',
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     
     class Meta:
         db_table = 'invites'
@@ -109,7 +109,7 @@ class EntryHistory(models.Model):
         verbose_name='авто', 
         on_delete=models.PROTECT
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата проезда')
 
     class Meta:
         db_table = 'entryhistories'
@@ -132,7 +132,7 @@ class OutHistory(models.Model):
         verbose_name='авто', 
         on_delete=models.PROTECT
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата проезда')
 
     class Meta:
         db_table = 'outhistories'
