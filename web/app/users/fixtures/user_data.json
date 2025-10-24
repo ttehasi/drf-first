@@ -4,7 +4,7 @@
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$1000000$90E4ZKads71ObM7Jnrypz1$nBVgyh4ScinI9DROzzJHhirHOGXcsRgVz4zEsRTVN8U=",
-    "last_login": "2025-10-17T09:00:38.433Z",
+    "last_login": "2025-10-23T08:30:50.479Z",
     "is_superuser": true,
     "username": "root",
     "first_name": "",
@@ -28,8 +28,8 @@
     "last_login": null,
     "is_superuser": false,
     "username": "tte",
-    "first_name": "Карамель",
-    "last_name": "Карумтян",
+    "first_name": "",
+    "last_name": "",
     "email": "",
     "is_staff": false,
     "is_active": true,
@@ -108,9 +108,26 @@
   }
 },
 {
+  "model": "users.guest",
+  "pk": 4,
+  "fields": {
+    "auto_number": "A304KF34",
+    "created_at": "2025-10-18T21:13:50.287Z"
+  }
+},
+{
+  "model": "users.guest",
+  "pk": 5,
+  "fields": {
+    "auto_number": "A616AA77",
+    "created_at": "2025-10-23T15:06:49.958Z"
+  }
+},
+{
   "model": "users.guestentry",
   "pk": 1,
   "fields": {
+    "entry_timeout": null,
     "enter_time": "2025-10-17T20:31:34.521Z",
     "out_time": null,
     "guest": 1,
@@ -123,6 +140,7 @@
   "model": "users.guestentry",
   "pk": 2,
   "fields": {
+    "entry_timeout": null,
     "enter_time": "2025-10-17T20:31:34.521Z",
     "out_time": null,
     "guest": 2,
@@ -135,12 +153,52 @@
   "model": "users.guestentry",
   "pk": 3,
   "fields": {
+    "entry_timeout": null,
     "enter_time": "2025-10-17T20:31:34.521Z",
     "out_time": null,
     "guest": 3,
     "yard": 1,
     "invite_by": 4,
     "created_at": "2025-10-17T20:31:34.521Z"
+  }
+},
+{
+  "model": "users.guestentry",
+  "pk": 4,
+  "fields": {
+    "entry_timeout": "2025-10-16T19:34:31.131Z",
+    "enter_time": null,
+    "out_time": null,
+    "guest": 4,
+    "yard": 1,
+    "invite_by": 1,
+    "created_at": "2025-10-18T21:31:40.904Z"
+  }
+},
+{
+  "model": "users.guestentry",
+  "pk": 5,
+  "fields": {
+    "entry_timeout": "2025-10-16T19:34:31.131Z",
+    "enter_time": null,
+    "out_time": null,
+    "guest": 4,
+    "yard": 1,
+    "invite_by": 1,
+    "created_at": "2025-10-18T21:33:32.910Z"
+  }
+},
+{
+  "model": "users.guestentry",
+  "pk": 6,
+  "fields": {
+    "entry_timeout": "2025-10-25T19:33:47.911Z",
+    "enter_time": null,
+    "out_time": null,
+    "guest": 5,
+    "yard": 1,
+    "invite_by": 1,
+    "created_at": "2025-10-23T15:06:49.961Z"
   }
 }
 ]

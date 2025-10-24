@@ -1,0 +1,187 @@
+[
+{
+  "model": "yard_control.automobile",
+  "pk": 1,
+  "fields": {
+    "auto_number": "A001AA77",
+    "is_confirmed": false,
+    "owner": 2,
+    "expires_at": "2025-10-30T19:33:46Z",
+    "created_at": "2025-10-16T19:33:47.911Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 2,
+  "fields": {
+    "auto_number": "A231AA54",
+    "is_confirmed": false,
+    "owner": 3,
+    "expires_at": "2025-10-31T08:33:30Z",
+    "created_at": "2025-10-17T08:33:31.807Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 3,
+  "fields": {
+    "auto_number": "A653SA51",
+    "is_confirmed": false,
+    "owner": 4,
+    "expires_at": "2025-10-31T08:33:52Z",
+    "created_at": "2025-10-17T08:33:53.603Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 8,
+  "fields": {
+    "auto_number": "R394FF44",
+    "is_confirmed": false,
+    "owner": 2,
+    "expires_at": "2025-11-06T08:51:27.567Z",
+    "created_at": "2025-10-23T08:51:27.567Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 11,
+  "fields": {
+    "auto_number": "R394FF43",
+    "is_confirmed": false,
+    "owner": 2,
+    "expires_at": "2025-11-06T10:32:02.152Z",
+    "created_at": "2025-10-23T10:32:02.152Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 12,
+  "fields": {
+    "auto_number": "R394AF43",
+    "is_confirmed": false,
+    "owner": 2,
+    "expires_at": "2025-11-06T10:46:46.121Z",
+    "created_at": "2025-10-23T10:46:46.122Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 13,
+  "fields": {
+    "auto_number": "E943AF43",
+    "is_confirmed": false,
+    "owner": 2,
+    "expires_at": "2025-11-06T10:51:41.917Z",
+    "created_at": "2025-10-23T10:51:41.918Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 15,
+  "fields": {
+    "auto_number": "E943AF77",
+    "is_confirmed": false,
+    "owner": 2,
+    "expires_at": "2025-11-06T11:13:00.152Z",
+    "created_at": "2025-10-23T11:13:00.152Z"
+  }
+},
+{
+  "model": "yard_control.yard",
+  "pk": 1,
+  "fields": {
+    "address": "Новокосинская д. 56",
+    "admin": 2,
+    "created_at": "2025-10-16T19:34:31.131Z",
+    "users": [
+      2,
+      3,
+      4
+    ],
+    "automobiles": [
+      2,
+      11,
+      12,
+      13,
+      15
+    ]
+  }
+},
+{
+  "model": "yard_control.yard",
+  "pk": 2,
+  "fields": {
+    "address": "Суздальска д. 32",
+    "admin": 4,
+    "created_at": "2025-10-17T08:32:18.002Z",
+    "users": [
+      2,
+      3,
+      4
+    ],
+    "automobiles": [
+      1,
+      3,
+      11,
+      12,
+      13,
+      15
+    ]
+  }
+},
+{
+  "model": "yard_control.entryhistory",
+  "pk": 1,
+  "fields": {
+    "yard": 1,
+    "auto": 1,
+    "created_at": "2025-10-16T19:38:33.200Z"
+  }
+},
+{
+  "model": "yard_control.outhistory",
+  "pk": 1,
+  "fields": {
+    "yard": 1,
+    "auto": 1,
+    "created_at": "2025-10-16T19:38:18.342Z"
+  }
+},
+{
+  "model": "yard_control.outhistory",
+  "pk": 2,
+  "fields": {
+    "yard": 1,
+    "auto": 1,
+    "created_at": "2025-10-20T09:59:07.350Z"
+  }
+},
+{
+  "model": "yard_control.outhistory",
+  "pk": 3,
+  "fields": {
+    "yard": 1,
+    "auto": 1,
+    "created_at": "2025-10-20T09:59:43.398Z"
+  }
+},
+{
+  "model": "yard_control.outhistory",
+  "pk": 4,
+  "fields": {
+    "yard": 1,
+    "auto": 1,
+    "created_at": "2025-10-20T10:08:36.444Z"
+  }
+},
+{
+  "model": "yard_control.outhistory",
+  "pk": 5,
+  "fields": {
+    "yard": 1,
+    "auto": 1,
+    "created_at": "2025-10-20T18:17:55.294Z"
+  }
+}
+]
