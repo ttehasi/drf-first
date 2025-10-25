@@ -5,6 +5,7 @@
   "fields": {
     "auto_number": "A001AA77",
     "is_confirmed": false,
+    "is_guest": false,
     "owner": 2,
     "expires_at": "2025-10-30T19:33:46Z",
     "created_at": "2025-10-16T19:33:47.911Z"
@@ -16,6 +17,7 @@
   "fields": {
     "auto_number": "A231AA54",
     "is_confirmed": false,
+    "is_guest": false,
     "owner": 3,
     "expires_at": "2025-10-31T08:33:30Z",
     "created_at": "2025-10-17T08:33:31.807Z"
@@ -27,6 +29,7 @@
   "fields": {
     "auto_number": "A653SA51",
     "is_confirmed": false,
+    "is_guest": false,
     "owner": 4,
     "expires_at": "2025-10-31T08:33:52Z",
     "created_at": "2025-10-17T08:33:53.603Z"
@@ -38,6 +41,7 @@
   "fields": {
     "auto_number": "R394FF44",
     "is_confirmed": false,
+    "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T08:51:27.567Z",
     "created_at": "2025-10-23T08:51:27.567Z"
@@ -49,6 +53,7 @@
   "fields": {
     "auto_number": "R394FF43",
     "is_confirmed": false,
+    "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T10:32:02.152Z",
     "created_at": "2025-10-23T10:32:02.152Z"
@@ -60,6 +65,7 @@
   "fields": {
     "auto_number": "R394AF43",
     "is_confirmed": false,
+    "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T10:46:46.121Z",
     "created_at": "2025-10-23T10:46:46.122Z"
@@ -71,6 +77,7 @@
   "fields": {
     "auto_number": "E943AF43",
     "is_confirmed": false,
+    "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T10:51:41.917Z",
     "created_at": "2025-10-23T10:51:41.918Z"
@@ -82,9 +89,154 @@
   "fields": {
     "auto_number": "E943AF77",
     "is_confirmed": false,
+    "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T11:13:00.152Z",
     "created_at": "2025-10-23T11:13:00.152Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 16,
+  "fields": {
+    "auto_number": "A001AE77",
+    "is_confirmed": false,
+    "is_guest": false,
+    "owner": 3,
+    "expires_at": "2025-11-07T11:13:22.700Z",
+    "created_at": "2025-10-24T11:13:22.701Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 17,
+  "fields": {
+    "auto_number": "A7651TR78",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": "2025-10-25T15:00:00Z",
+    "created_at": "2025-10-24T22:38:19.970Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 18,
+  "fields": {
+    "auto_number": "A7651TR789",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-24T22:40:02.814Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 19,
+  "fields": {
+    "auto_number": "A7651QQ789",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-24T22:45:14.955Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 20,
+  "fields": {
+    "auto_number": "E332FD77",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-25T08:51:32.377Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 21,
+  "fields": {
+    "auto_number": "A616AA77",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-25T08:51:54.449Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 22,
+  "fields": {
+    "auto_number": "A304KF34",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-25T08:52:06.444Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 23,
+  "fields": {
+    "auto_number": "A204LP34",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-25T08:52:17.274Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 24,
+  "fields": {
+    "auto_number": "A343SA43",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-25T08:52:30.894Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 25,
+  "fields": {
+    "auto_number": "A901GE75",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-25T08:52:46.463Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 26,
+  "fields": {
+    "auto_number": "A555AS22",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-25T11:38:47.824Z"
+  }
+},
+{
+  "model": "yard_control.automobile",
+  "pk": 27,
+  "fields": {
+    "auto_number": "Q666WE777",
+    "is_confirmed": false,
+    "is_guest": true,
+    "owner": null,
+    "expires_at": null,
+    "created_at": "2025-10-25T11:55:20.121Z"
   }
 },
 {
@@ -100,11 +252,13 @@
       4
     ],
     "automobiles": [
+      1,
       2,
       11,
       12,
       13,
-      15
+      15,
+      16
     ]
   }
 },
@@ -131,12 +285,65 @@
   }
 },
 {
+  "model": "yard_control.yard",
+  "pk": 3,
+  "fields": {
+    "address": "Электрозаводская д. 10",
+    "admin": 5,
+    "created_at": "2025-10-25T11:17:00.518Z",
+    "users": [
+      2,
+      3,
+      5
+    ],
+    "automobiles": [
+      23
+    ]
+  }
+},
+{
   "model": "yard_control.entryhistory",
   "pk": 1,
   "fields": {
     "yard": 1,
     "auto": 1,
     "created_at": "2025-10-16T19:38:33.200Z"
+  }
+},
+{
+  "model": "yard_control.entryhistory",
+  "pk": 2,
+  "fields": {
+    "yard": 1,
+    "auto": 18,
+    "created_at": "2025-10-24T22:44:03.687Z"
+  }
+},
+{
+  "model": "yard_control.entryhistory",
+  "pk": 3,
+  "fields": {
+    "yard": 1,
+    "auto": 19,
+    "created_at": "2025-10-24T22:45:49.538Z"
+  }
+},
+{
+  "model": "yard_control.entryhistory",
+  "pk": 4,
+  "fields": {
+    "yard": 1,
+    "auto": 19,
+    "created_at": "2025-10-24T22:46:31.393Z"
+  }
+},
+{
+  "model": "yard_control.entryhistory",
+  "pk": 5,
+  "fields": {
+    "yard": 1,
+    "auto": 18,
+    "created_at": "2025-10-25T08:45:43.142Z"
   }
 },
 {
@@ -182,6 +389,24 @@
     "yard": 1,
     "auto": 1,
     "created_at": "2025-10-20T18:17:55.294Z"
+  }
+},
+{
+  "model": "yard_control.outhistory",
+  "pk": 6,
+  "fields": {
+    "yard": 1,
+    "auto": 19,
+    "created_at": "2025-10-24T22:46:43.895Z"
+  }
+},
+{
+  "model": "yard_control.outhistory",
+  "pk": 7,
+  "fields": {
+    "yard": 1,
+    "auto": 18,
+    "created_at": "2025-10-25T08:48:12.178Z"
   }
 }
 ]
