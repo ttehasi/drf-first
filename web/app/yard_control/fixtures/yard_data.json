@@ -135,7 +135,7 @@
   "model": "yard_control.automobile",
   "pk": 19,
   "fields": {
-    "auto_number": "A7651QQ789",
+    "auto_number": "A765QQ789",
     "is_confirmed": false,
     "is_guest": true,
     "owner": null,
