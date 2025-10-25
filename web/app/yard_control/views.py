@@ -126,11 +126,15 @@ class CombinedHistoryView(APIView):
                 if event_type == 'entry':
                     if auto.is_guest:
                         guest = Guest.objects.get(auto_number=auto_number)
-                        guest_entry = GuestEntry.objects.get(guest=guest,
+                        guest_entry = GuestEntry.objects.filter(guest=guest,
                                                              enter_time__isnull=True,
-                                                             entry_timeout__gte=now)
-                        guest_entry.enter_time = now
-                        guest_entry.save()
+                                                             entry_timeout__gte=now,
+                                                             yard=yard).first()
+                        if guest_entry:
+                            guest_entry.enter_time = now
+                            guest_entry.save()
+                        else:
+                            return Response({'error': 'Гостевой доступ не найден'})
                     history_entry = EntryHistory.objects.create(
                         yard=yard,
                         auto=auto
@@ -145,11 +149,15 @@ class CombinedHistoryView(APIView):
                 else:  # exit
                     if auto.is_guest:
                         guest = Guest.objects.get(auto_number=auto_number)
-                        guest_entry = GuestEntry.objects.get(guest=guest,
+                        guest_entry = GuestEntry.objects.filter(guest=guest,
                                                              out_time__isnull=True,
-                                                             entry_timeout__gte=now)
-                        guest_entry.out_time = now
-                        guest_entry.save()
+                                                             entry_timeout__gte=now,
+                                                             yard=yard).first()
+                        if guest_entry:
+                            guest_entry.out_time = now
+                            guest_entry.save()
+                        else:
+                            raise ValueError({'error': 'Гостевой доступ не найден'})
                     history_entry = OutHistory.objects.create(
                         yard=yard,
                         auto=auto
@@ -277,6 +285,7 @@ class AutoNumberAPIView(generics.ListAPIView):
         queryset = Yard.objects.all()
         numbers = []
         for yard in queryset:
+            black_list = yard.black_lists.all()
             autos = yard.automobiles.all()
             auto = [
                 {

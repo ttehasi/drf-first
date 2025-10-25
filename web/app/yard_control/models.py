@@ -13,7 +13,7 @@ class Automobile(models.Model):
         null=True,
         blank=True
     )
-    expires_at = models.DateTimeField(verbose_name='Временный доступ', null=True)
+    expires_at = models.DateTimeField(verbose_name='Временный доступ', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     
     class Meta:
@@ -62,7 +62,8 @@ class BlackList(models.Model):
         Yard,
         on_delete=models.CASCADE,
         verbose_name='черный список двора',
-        null=True
+        null=True,
+        related_name='black_lists'
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     
