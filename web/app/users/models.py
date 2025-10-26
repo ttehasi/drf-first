@@ -33,9 +33,9 @@ class Guest(models.Model):
         
         
 class GuestEntry(models.Model):
-    entry_timeout = models.DateTimeField(null=True, verbose_name='таймаут на въезд')
-    enter_time = models.DateTimeField(null=True, verbose_name='время заезда')
-    out_time = models.DateTimeField(null=True, verbose_name='время выезда')
+    entry_timeout = models.DateTimeField(null=True, verbose_name='таймаут на въезд', blank=True)
+    enter_time = models.DateTimeField(null=True, verbose_name='время заезда', blank=True)
+    out_time = models.DateTimeField(null=True, verbose_name='время выезда', blank=True)
     guest = models.ForeignKey(
         Guest,
         on_delete=models.PROTECT,

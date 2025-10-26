@@ -285,12 +285,13 @@ class AutoNumberAPIView(generics.ListAPIView):
         queryset = Yard.objects.all()
         numbers = []
         for yard in queryset:
-            black_list = yard.black_lists.all()
+            black_list = yard.blacklist_set.all()
+            black_auto = [black.auto_number for black in black_list]
             autos = yard.automobiles.all()
             auto = [
                 {
                     'yard_id': yard.id,
-                    'automobiles': [auto.auto_number for auto in autos],
+                    'automobiles': [auto.auto_number for auto in autos if auto.auto_number not in black_auto],
                     'yard_auto_count': [auto.auto_number for auto in autos].__len__()
                 }
             ]

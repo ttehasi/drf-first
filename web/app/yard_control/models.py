@@ -57,13 +57,12 @@ class Yard(models.Model):
         
         
 class BlackList(models.Model):
-    auto_number = models.CharField(max_length=9, unique=True, verbose_name='автомобильный номер')
-    yard = models.OneToOneField(
+    auto_number = models.CharField(max_length=9, verbose_name='автомобильный номер')
+    yard = models.ForeignKey(
         Yard,
         on_delete=models.CASCADE,
         verbose_name='черный список двора',
         null=True,
-        related_name='black_lists'
     )
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     
@@ -71,6 +70,7 @@ class BlackList(models.Model):
         db_table = 'blacklists'
         verbose_name = 'Черного списка'
         verbose_name_plural = 'Черные списки'
+        unique_together = ['auto_number', 'yard']
         
     def __str__(self):
         return self.auto_number
