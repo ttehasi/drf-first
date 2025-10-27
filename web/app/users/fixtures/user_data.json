@@ -4,7 +4,7 @@
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$1000000$90E4ZKads71ObM7Jnrypz1$nBVgyh4ScinI9DROzzJHhirHOGXcsRgVz4zEsRTVN8U=",
-    "last_login": "2025-10-25T11:53:18.637Z",
+    "last_login": "2025-10-27T08:32:30.413Z",
     "is_superuser": true,
     "username": "root",
     "first_name": "",
@@ -52,10 +52,10 @@
     "first_name": "Егор",
     "last_name": "Владимирович",
     "email": "",
-    "is_staff": false,
+    "is_staff": true,
     "is_active": true,
     "date_joined": "2025-10-17T08:28:57Z",
-    "admin": false,
+    "admin": true,
     "phone": "89685135435",
     "created_at": "2025-10-17T08:30:02.064Z",
     "groups": [],
@@ -88,7 +88,7 @@
   "pk": 5,
   "fields": {
     "password": "pbkdf2_sha256$1000000$ZoDrZYwlHTVXevD5Vo7B5z$s7vHJnABN18K5st/MeiKFko8ajOupAxFUivWBDYsxvc=",
-    "last_login": "2025-10-25T11:54:32.476Z",
+    "last_login": "2025-10-27T08:33:56.695Z",
     "is_superuser": false,
     "username": "fortuna",
     "first_name": "Артем",
@@ -100,6 +100,27 @@
     "admin": true,
     "phone": "88005553535",
     "created_at": "2025-10-25T11:13:56.488Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "users.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$ccIpK3aIwYaccNPZ76jnDj$imjkFcCp+UtqpnpGL37tttwi+OhCqFwdyGcEZpqO9xQ=",
+    "last_login": "2025-10-27T08:30:47.106Z",
+    "is_superuser": false,
+    "username": "qwe",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2025-10-25T14:34:52Z",
+    "admin": true,
+    "phone": "322",
+    "created_at": "2025-10-25T14:34:52.850Z",
     "groups": [],
     "user_permissions": []
   }
@@ -172,7 +193,7 @@
   "model": "users.guest",
   "pk": 10,
   "fields": {
-    "auto_number": "A760QQ789",
+    "auto_number": "A765QQ789",
     "created_at": "2025-10-24T22:45:14.927Z"
   }
 },
@@ -190,6 +211,38 @@
   "fields": {
     "auto_number": "Q666WE777",
     "created_at": "2025-10-25T11:55:20.093Z"
+  }
+},
+{
+  "model": "users.guest",
+  "pk": 13,
+  "fields": {
+    "auto_number": "A343SYY3",
+    "created_at": "2025-10-25T14:36:34.323Z"
+  }
+},
+{
+  "model": "users.guest",
+  "pk": 14,
+  "fields": {
+    "auto_number": "D736JK77",
+    "created_at": "2025-10-27T08:26:56.137Z"
+  }
+},
+{
+  "model": "users.guest",
+  "pk": 15,
+  "fields": {
+    "auto_number": "A933EA43",
+    "created_at": "2025-10-27T08:36:32.520Z"
+  }
+},
+{
+  "model": "users.guest",
+  "pk": 16,
+  "fields": {
+    "auto_number": "A952EA43",
+    "created_at": "2025-10-27T08:38:01.646Z"
   }
 },
 {
@@ -372,6 +425,32 @@
     "yard": 1,
     "invite_by": 1,
     "created_at": "2025-10-25T11:55:52.709Z"
+  }
+},
+{
+  "model": "users.guestentry",
+  "pk": 17,
+  "fields": {
+    "entry_timeout": "2025-10-25T17:00:00Z",
+    "enter_time": null,
+    "out_time": null,
+    "guest": 13,
+    "yard": 5,
+    "invite_by": 5,
+    "created_at": "2025-10-25T14:39:09.329Z"
+  }
+},
+{
+  "model": "users.guestentry",
+  "pk": 18,
+  "fields": {
+    "entry_timeout": "2025-10-30T22:45:14.955Z",
+    "enter_time": null,
+    "out_time": null,
+    "guest": 16,
+    "yard": 3,
+    "invite_by": 1,
+    "created_at": "2025-10-27T08:38:01.683Z"
   }
 }
 ]

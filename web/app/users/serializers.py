@@ -109,6 +109,7 @@ class GuestEntryCreateSerializer(serializers.ModelSerializer):
         except Yard.DoesNotExist:
             raise serializers.ValidationError({"yard_id": "Двор не найден"})
         
+        yard.automobiles.add(auto)
         user = self.context['request'].user
         
         guest_entry = GuestEntry.objects.create(
