@@ -210,7 +210,7 @@ class InviteAdmin(admin.ModelAdmin):
     
 @admin.register(EntryHistory)
 class EntryHistoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'yard', 'auto', 'created_at']
+    list_display = ['id', 'yard', 'auto_number', 'created_at']
     # list_filter = [YardAdminFilter, 'created_at']
     readonly_fields = ['created_at']
     
@@ -256,7 +256,7 @@ class EntryHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(OutHistory)
 class OutHistoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'yard', 'auto', 'created_at']
+    list_display = ['id', 'yard', 'auto_number', 'created_at']
     # list_filter = [YardAdminFilter, 'created_at']
     readonly_fields = ['created_at']
     

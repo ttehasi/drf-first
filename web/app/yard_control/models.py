@@ -82,7 +82,7 @@ class Invite(models.Model):
         'users.User',
         on_delete=models.PROTECT,
         related_name='my_invites',
-        verbose_name='кто пригласил',
+        verbose_name='кого пригласили',
     )
     yard = models.ForeignKey(
         Yard,
@@ -98,7 +98,7 @@ class Invite(models.Model):
         verbose_name_plural = 'Приглашения'
         
     def __str__(self):
-        return self.user
+        return self.user.phone
     
     
 class EntryHistory(models.Model):
@@ -108,20 +108,21 @@ class EntryHistory(models.Model):
         related_name='entry_history',
         verbose_name='какого двора история',
     )
-    auto = models.ForeignKey(
-        Automobile,
-        verbose_name='авто', 
-        on_delete=models.PROTECT
-    )
+    # auto = models.ForeignKey(
+    #     Automobile,
+    #     verbose_name='авто', 
+    #     on_delete=models.PROTECT
+    # )
+    auto_number = models.CharField(max_length=9, verbose_name='автомобильный номер', null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата проезда')
 
     class Meta:
         db_table = 'entryhistories'
         verbose_name = 'Истроия въездов'
-        verbose_name_plural = 'Истрории въездов'
+        verbose_name_plural = 'Истории въездов'
 
     def __str__(self):
-        return self.auto.auto_number
+        return self.auto_number
     
 
 class OutHistory(models.Model):
@@ -131,11 +132,12 @@ class OutHistory(models.Model):
         related_name='out_history',
         verbose_name='какого двора история',
     )
-    auto = models.ForeignKey(
-        Automobile,
-        verbose_name='авто', 
-        on_delete=models.PROTECT
-    )
+    # auto = models.ForeignKey(
+    #     Automobile,
+    #     verbose_name='авто', 
+    #     on_delete=models.PROTECT
+    # )
+    auto_number = models.CharField(max_length=9, verbose_name='автомобильный номер', null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата проезда')
 
     class Meta:
@@ -144,4 +146,4 @@ class OutHistory(models.Model):
         verbose_name_plural = 'Истрории выездов'
 
     def __str__(self):
-        return self.auto.auto_number
+        return self.auto_number

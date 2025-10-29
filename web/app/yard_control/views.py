@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import permissions
 from rest_framework import status, generics
 from django.db import transaction
 from django.utils import timezone
@@ -11,6 +12,7 @@ from .models import(
     OutHistory,
     Yard,
     Automobile,
+    Invite
 )
 
 from app.users.models import (
@@ -23,13 +25,15 @@ from .serializers import (
     CombinedHistorySerializer,
     AutomobileNumberSerializer,
     AutomobileCreateSerializer,
-    CombinedHistoryCreateSerializer
+    CombinedHistoryCreateSerializer,
+    InviteGetSerializer,
+    DeleteAutoSerializer
 )
 
 class CombinedHistoryView(APIView):
     def get(self, request):
         yard_id = request.query_params.get('yard_id')
-        auto_id = request.query_params.get('auto_id')
+        # auto_id = request.query_params.get('auto_id')
         auto_number = request.query_params.get('auto_number')
         date_from = request.query_params.get('date_from')
         date_to = request.query_params.get('date_to')
@@ -41,9 +45,9 @@ class CombinedHistoryView(APIView):
             entry_queryset = entry_queryset.filter(yard_id=yard_id)
             out_queryset = out_queryset.filter(yard_id=yard_id)
         
-        if auto_id:
-            entry_queryset = entry_queryset.filter(auto_id=auto_id)
-            out_queryset = out_queryset.filter(auto_id=auto_id)
+        # if auto_id:
+        #     entry_queryset = entry_queryset.filter(auto_id=auto_id)
+        #     out_queryset = out_queryset.filter(auto_id=auto_id)
         
         if auto_number:
             entry_queryset = entry_queryset.filter(auto__auto_number__icontains=auto_number)
@@ -75,7 +79,7 @@ class CombinedHistoryView(APIView):
                 'id': entry.id,
                 'event_type': 'entry',
                 'created_at': entry.created_at,
-                'auto': entry.auto,
+                'auto_number': entry.auto_number,
                 'yard': entry.yard
             })
         
@@ -84,7 +88,7 @@ class CombinedHistoryView(APIView):
                 'id': out.id,
                 'event_type': 'exit',
                 'created_at': out.created_at,
-                'auto': out.auto,
+                'auto_number': out.auto_number,
                 'yard': out.yard
             })
         
@@ -137,7 +141,7 @@ class CombinedHistoryView(APIView):
                             return Response({'error': 'Гостевой доступ не найден'})
                     history_entry = EntryHistory.objects.create(
                         yard=yard,
-                        auto=auto
+                        auto_number=auto.auto_number
                     )
                     history_data = {
                         'id': history_entry.id,
@@ -160,7 +164,7 @@ class CombinedHistoryView(APIView):
                             raise ValueError({'error': 'Гостевой доступ не найден'})
                     history_entry = OutHistory.objects.create(
                         yard=yard,
-                        auto=auto
+                        auto_number=auto.auto_number
                     )
                     history_data = {
                         'id': history_entry.id,
@@ -177,17 +181,7 @@ class CombinedHistoryView(APIView):
                 {'error': f'Ошибка при создании записи: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            
-    
-    
-# class AutomobileCreateAPIView(APIView):
-#     def post(self, request): # нужно еще добавить таску на expires at
-#         serializer = AutomobileCreateSerializer(data=request.data)
-#         if serializer.is_valid():
-#             serializer.save()
-#             return Response(serializer.data, status=status.HTTP_201_CREATED)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+                
 
 class AutomobileCreateAPIView(APIView):
     def post(self, request):
@@ -263,7 +257,7 @@ class AutomobileCreateAPIView(APIView):
                 return Response(response_data, status=status.HTTP_201_CREATED)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
 
 class AutoNumberAPIView(generics.ListAPIView):
     serializer_class = AutomobileNumberSerializer
@@ -308,3 +302,23 @@ class AutoNumberAPIView(generics.ListAPIView):
         #     'auto_numbers': serializer.data
         # }
         # return Response(response)
+        
+        
+class InviteAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get(self, request, *args, **kwargs):
+        invites = Invite.objects.filter(user=request.user)
+        serializer = InviteGetSerializer(invites, many=True)
+        return Response(serializer.data)
+    
+    
+class AutoDeleteView(APIView):
+    def delete(self, request, *args, **kwargs):
+        serializer = DeleteAutoSerializer(data=request.data)
+        if serializer.is_valid():
+            auto_number = serializer.validated_data['auto_number']
+            auto = Automobile.objects.get(auto_number=auto_number)
+            auto.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

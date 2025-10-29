@@ -120,3 +120,12 @@ class GuestEntryCreateSerializer(serializers.ModelSerializer):
         )
         
         return guest_entry
+    
+
+class UserSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source='get_full_name')
+    
+    class Meta:
+        model = User
+        fields = ['id', 'phone', 'name']
+        

@@ -26,6 +26,64 @@ from datetime import timedelta
 from app.yard_control.admin import YardAdminFilter
 
 
+# class GuestentryFilter(admin.SimpleListFilter): # гостевые заявки фильтр
+#     """Фильтр для выбора двора в админке"""
+#     title = 'Статус'
+#     parameter_name = 'status'
+    
+#     # def lookups(self, request, model_admin):
+#     #     if request.user.admin and not request.user.is_superuser:
+#     #         yards = Yard.objects.filter(admin=request.user)
+#     #         return [(yard.id, yard.address) for yard in yards]
+#     #     return []
+    
+#     # def queryset(self, request, queryset):
+#     #     if self.value() and request.user.admin and not request.user.is_superuser:
+#     #         return self.filter_queryset(queryset, self.value())
+#     #     return queryset
+    
+#     # def lookups(self, request, model_admin):
+#     #     if request.user.is_superuser:
+#     #         yards = Yard.objects.all()
+#     #         return [(yard.id, yard.address) for yard in yards]
+#     #     elif getattr(request.user, 'admin', False):
+#     #         yards = Yard.objects.filter(admin=request.user)
+#     #         return [(yard.id, yard.address) for yard in yards]
+#     #     return []
+    
+#     def lookups(self, request, model_admin):
+#         if request.user.is_superuser:
+#             yards = Yard.objects.all()
+#             guestsentry = GuestEntry.objects.all()
+#             return [(0, 'Неактивные'), (1, 'Активные')]
+#         elif getattr(request.user, 'admin', False):
+#             yards = Yard.objects.filter(admin=request.user)
+#             return [(yard.id, yard.address) for yard in yards]
+#         return []
+    
+#     def queryset(self, request, queryset):
+#         if self.value():
+#             if request.user.is_superuser:
+#                 return self.filter_queryset(queryset, self.value())
+#             elif getattr(request.user, 'admin', False):
+#                 try:
+#                     yard = Yard.objects.get(id=self.value(), admin=request.user)
+#                     return self.filter_queryset(queryset, self.value())
+#                 except Yard.DoesNotExist:
+#                     return queryset.none()
+#         return queryset
+    
+#     def filter_queryset(self, queryset, yard_id):
+#         """Фильтрует queryset по выбранному двору"""
+#         model_name = queryset.model.__name__
+#         yard = Yard.objects.get(id=yard_id)
+        
+#         if model_name == 'GuestEntry':
+            
+#             return queryset.filter(yard=yard)
+#         return queryset
+
+
 @admin.register(GuestEntry)
 class GuestEntryAdmin(admin.ModelAdmin):
     list_display = ['id', 'entry_timeout', 'guest', 'yard', 'enter_time', 'out_time', 'invite_by', 'created_at']

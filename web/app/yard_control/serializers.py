@@ -1,5 +1,13 @@
 from rest_framework import serializers
-from .models import EntryHistory, OutHistory, Automobile, Yard
+from .models import (
+    EntryHistory,
+    OutHistory,
+    Automobile,
+    Yard,
+    Invite
+)
+
+from app.users.serializers import UserSerializer
 
 class AutomobileSerializer(serializers.ModelSerializer):
     class Meta:
@@ -39,11 +47,11 @@ class YardSerializer(serializers.ModelSerializer):
 class CombinedHistorySerializer(serializers.Serializer):
     event_type = serializers.CharField()
     created_at = serializers.DateTimeField()
-    auto = AutomobileSerializer()
+    # auto = AutomobileSerializer()
     yard = YardSerializer()
     
     class Meta:
-        fields = ['event_type', 'created_at', 'auto', 'yard']
+        fields = ['event_type', 'created_at', 'auto_number', 'yard']
         
         
 class AutomobileCreateSerializer(serializers.Serializer):
@@ -89,3 +97,20 @@ class AutomobileNumberSerializer(serializers.ModelSerializer):
     class Meta:
         model = Automobile
         fields = ['auto_number']
+        
+        
+class InviteGetSerializer(serializers.ModelSerializer):
+    user = UserSerializer()
+    yard = YardSerializer()
+    class Meta:
+        model = Invite
+        fields = ['id', 'user', 'yard', 'created_at']
+        
+        
+class DeleteAutoSerializer(serializers.Serializer):
+    auto_number = serializers.CharField(max_length=20)
+    
+    def validate_auto_number(self, value):
+        if not Automobile.objects.filter(auto_number=value).exists():
+            raise serializers.ValidationError("Автомобиль с таким номером не найден")
+        return value
