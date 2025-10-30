@@ -2,13 +2,46 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 # Create your models here.
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.db import models
+
+class UserManager(BaseUserManager):
+    def create_user(self, phone, password=None, **extra_fields):
+        """Создает и возвращает пользователя с phone и password"""
+        if not phone:
+            raise ValueError('The Phone field must be set')
+        
+        user = self.model(phone=phone, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, phone, password=None, **extra_fields):
+        """Создает и возвращает суперпользователя"""
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_active', True)
+
+        if extra_fields.get('is_staff') is not True:
+            raise ValueError('Superuser must have is_staff=True.')
+        if extra_fields.get('is_superuser') is not True:
+            raise ValueError('Superuser must have is_superuser=True.')
+
+        return self.create_user(phone, password, **extra_fields)
+
+
 class User(AbstractUser):
     admin = models.BooleanField(default=False, verbose_name='статус админа')
     phone = models.CharField(verbose_name='Телефон', unique=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
+    full_name = models.CharField(verbose_name='ФИО', blank=True)
     
-    def get_full_name(self):
-        return super().get_full_name()
+    username = None
+        
+    USERNAME_FIELD = 'phone'
+    REQUIRED_FIELDS = []
+    
+    objects = UserManager()
     
     class Meta:
         db_table = 'users'

@@ -59,7 +59,7 @@ class GuestEntrySerializer(serializers.ModelSerializer):
     guest_auto_number = serializers.CharField(source='guest.auto_number')
     yard_address = serializers.CharField(source='yard.address', read_only=True)
     yard_id = serializers.CharField(source='yard.id')
-    invite_by_name = serializers.CharField(source='invite_by.get_full_name', read_only=True)
+    invite_by_name = serializers.CharField(source='invite_by.full_name', read_only=True)
     
     class Meta:
         model = GuestEntry
@@ -123,7 +123,7 @@ class GuestEntryCreateSerializer(serializers.ModelSerializer):
     
 
 class UserSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source='get_full_name')
+    name = serializers.CharField(source='full_name')
     
     class Meta:
         model = User

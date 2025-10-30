@@ -131,24 +131,24 @@ class GuestEntryAdmin(admin.ModelAdmin):
         return request.user.is_superuser
 
 class CustomUserAdmin(UserAdmin):
+    ordering = ()
     # list_display = ['id', 'first_name', 'last_name', 'phone', 'admin', 'is_staff', 'created_at']
     list_filter = [YardAdminFilter, 'admin', 'is_staff', 'is_active', 'created_at']
     readonly_fields = ['created_at']
-    search_fields = ['username', 'phone']
+    search_fields = ['phone']
     
-    fieldsets = (
-        (None, {'fields': ('username',)}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email', 'phone')}),
-        (_('Permissions'), {
-            'fields': ('admin', 'is_active', 'is_staff', 'is_superuser'),
-        }),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
-    )
+    # fieldsets = (
+    #     (_('Personal info'), {'fields': ('full_name', 'email', 'phone')}),
+    #     (_('Permissions'), {
+    #         'fields': ('admin', 'is_active', 'is_staff', 'is_superuser'),
+    #     }),
+    #     (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+    # )
     
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'first_name', 'last_name', 'phone', 'is_staff', 'password1', 'password2'),
+            'fields': ('full_name', 'phone', 'is_staff', 'password1', 'password2'),
         }),
     )
     
@@ -158,10 +158,25 @@ class CustomUserAdmin(UserAdmin):
         return ", ".join([yard.address for yard in yards]) if yards else "-"
     get_managed_yards.short_description = 'Управляемые дворы'
     
+    def get_fieldsets(self, request, obj=None):
+        if request.user.is_superuser:
+            fieldsets = (
+            (_('Personal info'), {'fields': ('full_name', 'email', 'phone')}),
+            (_('Permissions'), {
+                'fields': ('admin', 'is_active', 'is_staff', 'is_superuser'),
+            }),
+            (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        )
+        else:
+            fieldsets = (
+            (_('Personal info'), {'fields': ('full_name', 'email', 'phone')}),
+        )
+        return fieldsets
+    
     def get_list_display(self, request):
         if request.user.is_superuser:
-            return ['id', 'first_name', 'last_name', 'phone', 'admin', 'get_managed_yards', 'is_staff', 'created_at']
-        return ['id', 'first_name', 'last_name', 'phone', 'created_at']
+            return ['id', 'full_name', 'phone', 'admin', 'get_managed_yards', 'is_staff', 'created_at']
+        return ['id', 'full_name', 'phone', 'created_at']
     
     def get_queryset(self, request):
         qs = super().get_queryset(request)

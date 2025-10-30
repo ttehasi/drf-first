@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     # приложения
     'app.users',
     'app.yard_control',
+    'authentication'
 ]
 
 MIDDLEWARE = [
@@ -167,7 +168,7 @@ REST_FRAMEWORK = {
 # JWT настройка
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(hours=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
 # CORS настройка (это фронт и бек на одной машине)
