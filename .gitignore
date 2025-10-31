@@ -209,3 +209,13 @@ Footer
 .pre-commit-cache/
 redis.conf
 nginx.conf
+# SSL certificates
+*.key
+*.csr
+*.pem
+ssl/
+nginx/ssl/
+**/ssl/
+certificate.key
+certificate.csr
+certificate_ca.crt
