@@ -3,7 +3,9 @@
 | Tool                                       | Description                                                            |
 |--------------------------------------------|------------------------------------------------------------------------|
 | [uv](https://docs.astral.sh/uv/)           | "An extremely fast Python package and project manager, written in Rust" |
-| [OS Linux](https://www.linux.org/)               | "семейство Unix-подобных операционных систем на базе ядра Linux"                           |
+| [OS Linux](https://www.linux.org/)               | "Семейство Unix-подобных операционных систем на базе ядра Linux"                           |
+| [make](https://www.gnu.org/software/make/)               | "Инструмент для автоматизации процессов преобразования файлов"                           |
+| [Git](https://git-scm.com/)               | "Git is a free and open source distributed version control system designed to handle everything from small to very large projects with speed and efficiency."                           |
 
 
 Для начала нужно скопировать репозиторий себе на локальную машину. Для этого откройте терминал и пропишите команду:
@@ -44,4 +46,5 @@ make run
 ~~~
 docker-compose up -d
 ~~~
+
 
