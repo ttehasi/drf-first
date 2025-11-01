@@ -1,3 +1,11 @@
+Обязательные зависимости:
+
+| Tool                                       | Description                                                            |
+|--------------------------------------------|------------------------------------------------------------------------|
+| [uv](https://docs.astral.sh/uv/)           | "An extremely fast Python package and project manager, written in Rust" |
+| [OS Linux](https://www.linux.org/)               | "семейство Unix-подобных операционных систем на базе ядра Linux"                           |
+
+
 Для начала нужно скопировать репозиторий себе на локальную машину. Для этого откройте терминал и пропишите команду:
 ~~~
 git clone git@github.com:ttehasi/drf-first.git
@@ -36,3 +44,4 @@ make run
 ~~~
 docker-compose up -d
 ~~~
+
