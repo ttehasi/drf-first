@@ -28,6 +28,7 @@ ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
     'http://localhost:8080',
     'http://127.0.0.1:8080',
+    'https://portal-tech-kpp.ru',
 ]
 
 # Application definition
@@ -46,7 +47,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'corsheaders',
     'django_filters',
-    'drf_yasg',
+    'drf_spectacular',
     
     # приложения
     'app.users',
@@ -149,6 +150,7 @@ REST_FRAMEWORK = {
     
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
+        'rest_framework.renderers.BrowsableAPIRenderer',
     ],
     
     # Пагинация
@@ -162,7 +164,15 @@ REST_FRAMEWORK = {
         "rest_framework.filters.OrderingFilter",
     ],
     
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Portal KPP',
+    'DESCRIPTION': 'API для управления кпп',
+    'VERSION': '1.0.0',
 }
 
 # JWT настройка

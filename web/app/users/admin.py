@@ -268,18 +268,17 @@ class GuestAdmin(admin.ModelAdmin):
         return list_filter
     
     def entry_count(self, obj):
-        auto = Automobile.objects.get(auto_number=obj.auto_number)
         yard_id = self.request.GET.get('yard')
         if yard_id:
             yard = Yard.objects.get(id=yard_id)
-            entry_queryset = EntryHistory.objects.filter(auto=auto, yard=yard)
+            entry_queryset = EntryHistory.objects.filter(auto_number=obj.auto_number, yard=yard)
             return entry_queryset.count()
         elif not yard_id and self.choise_count > 1:
             return 'Выберете конкретный двор'
         else:
             yard_id = self.choise[0][0]
             yard = Yard.objects.get(id=yard_id)
-            entry_queryset = EntryHistory.objects.filter(auto=auto, yard=yard)
+            entry_queryset = EntryHistory.objects.filter(auto_number=obj.auto_number, yard=yard)
             return entry_queryset.count()
     entry_count.short_description = 'Количество посещений'
     
@@ -314,12 +313,11 @@ class GuestAdmin(admin.ModelAdmin):
         return " ".join(parts)
     
     def average_enrty_time(self, obj):
-        auto = Automobile.objects.get(auto_number=obj.auto_number)
         yard_id = self.request.GET.get('yard')
         if yard_id:
             yard = Yard.objects.get(id=yard_id)
-            entry_queryset = EntryHistory.objects.filter(auto=auto, yard=yard)
-            out_queryset = OutHistory.objects.filter(auto=auto, yard=yard)
+            entry_queryset = EntryHistory.objects.filter(auto_number=obj.auto_number, yard=yard)
+            out_queryset = OutHistory.objects.filter(auto_number=obj.auto_number, yard=yard)
             combined_history = list(entry_queryset) + list(out_queryset)
             combined_history.sort(key=lambda x: x.created_at)
             if len(combined_history) % 2 != 0:
@@ -339,8 +337,8 @@ class GuestAdmin(admin.ModelAdmin):
         else:
             yard_id = self.choise[0][0]
             yard = Yard.objects.get(id=yard_id)
-            entry_queryset = EntryHistory.objects.filter(auto=auto, yard=yard)
-            out_queryset = OutHistory.objects.filter(auto=auto, yard=yard)
+            entry_queryset = EntryHistory.objects.filter(auto_number=obj.auto_number, yard=yard)
+            out_queryset = OutHistory.objects.filter(auto_number=obj.auto_number, yard=yard)
             combined_history = list(entry_queryset) + list(out_queryset)
             combined_history.sort(key=lambda x: x.created_at)
             if len(combined_history) % 2 != 0:

@@ -8,8 +8,10 @@ from app.yard_control.models import (
     Yard,
     Automobile,
 )
-from rest_framework.response import Response
 from django.db.utils import IntegrityError
+from django.utils import timezone
+
+from .tasks import remove_guest_automobile_scheduled
 
 
 class AutomobileSerializer(serializers.ModelSerializer):
@@ -118,6 +120,20 @@ class GuestEntryCreateSerializer(serializers.ModelSerializer):
             invite_by=user,
             **validated_data
         )
+        
+        # время до выполнения задачи
+        now = timezone.localtime(timezone.now())
+        delay_seconds = (validated_data.get('entry_timeout') - now).total_seconds()
+        
+        # Запуск задачи через рассчитанное время
+        if delay_seconds > 0:
+            remove_guest_automobile_scheduled.apply_async(
+                args=[guest_auto_number],
+                countdown=delay_seconds
+            )
+        else:
+            # Если время уже истекло, выполняем сразу
+            remove_guest_automobile_scheduled.delay(guest_auto_number)
         
         return guest_entry
     

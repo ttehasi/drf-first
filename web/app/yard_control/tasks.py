@@ -14,11 +14,11 @@ def check_automobile_confirmation(self, automobile_id, yard_id=None):
         from .models import Automobile
         
         
-        # Просто получаем автомобиль - без проверок в кэше
+        # получаем автомобиль
         automobile = Automobile.objects.get(id=automobile_id)
         
         # Подсчет количества дней во дворе
-        days_in_courtyard = calculate_days_in_courtyard(automobile, yard_id)
+        days_in_courtyard = calculate_days_in_courtyard(automobile.auto_number, yard_id)
         
         
         if days_in_courtyard >= 11:
@@ -48,15 +48,15 @@ def check_automobile_confirmation(self, automobile_id, yard_id=None):
     except Exception as e:
         self.retry(countdown=300, max_retries=3)
 
-def calculate_days_in_courtyard(automobile, yard_id):
+def calculate_days_in_courtyard(auto_number, yard_id):
     """
     Подсчет количества дней, которые автомобиль был во дворе
     За последние 14 дней от даты создания
     """
     try:
         
-        out_history = OutHistory.objects.filter(yard_id=yard_id, auto=automobile).count()
-        entry_history = EntryHistory.objects.filter(yard_id=yard_id, auto=automobile).count()
+        out_history = OutHistory.objects.filter(yard_id=yard_id, auto=auto_number).count()
+        entry_history = EntryHistory.objects.filter(yard_id=yard_id, auto=auto_number).count()
         
         return (out_history + entry_history) // 2 # Надо еще дописать логику подсчета ночей 
         

@@ -38,8 +38,8 @@ class CombinedHistoryView(APIView):
         date_from = request.query_params.get('date_from')
         date_to = request.query_params.get('date_to')
         
-        entry_queryset = EntryHistory.objects.select_related('auto', 'yard')
-        out_queryset = OutHistory.objects.select_related('auto', 'yard')
+        entry_queryset = EntryHistory.objects.select_related('yard')
+        out_queryset = OutHistory.objects.select_related('yard')
         
         if yard_id:
             entry_queryset = entry_queryset.filter(yard_id=yard_id)
