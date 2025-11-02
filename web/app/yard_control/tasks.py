@@ -55,8 +55,8 @@ def calculate_days_in_courtyard(auto_number, yard_id):
     """
     try:
         
-        out_history = OutHistory.objects.filter(yard_id=yard_id, auto=auto_number).count()
-        entry_history = EntryHistory.objects.filter(yard_id=yard_id, auto=auto_number).count()
+        out_history = OutHistory.objects.filter(yard_id=yard_id, auto_number=auto_number).count()
+        entry_history = EntryHistory.objects.filter(yard_id=yard_id, auto_number=auto_number).count()
         
         return (out_history + entry_history) // 2 # Надо еще дописать логику подсчета ночей 
         
