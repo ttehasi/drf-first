@@ -48,7 +48,6 @@ services:
     volumes:
       - static:/app/staticfiles/
       - media:/app/media/
-      - ./path/to/ssl/certs:/etc/nginx/ssl
     ports:
       - "80:80"  # на локалке будет 8080:80, 80:80 на проде (внешний на машине:внутренний в контейнере)
       - "443:443"
