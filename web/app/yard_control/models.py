@@ -3,7 +3,6 @@ from django.db import models
 
 class Automobile(models.Model):
     auto_number = models.CharField(max_length=9, unique=True, verbose_name='автомобильный номер')
-    is_confirmed = models.BooleanField(verbose_name='Подтверждена', default=False)
     is_guest = models.BooleanField(verbose_name='Гостевое авто', default=False)
     owner = models.ForeignKey(
         'users.User',
@@ -54,6 +53,26 @@ class Yard(models.Model):
         
     def __str__(self):
         return self.address
+    
+    
+class ConfirmAutoInYard(models.Model):
+    is_confirmed = models.BooleanField(verbose_name='Подтверждена', default=False)
+    auto = models.ForeignKey(
+        Automobile,
+        on_delete=models.CASCADE,
+        verbose_name='машина',
+        null=True,
+    )
+    yard = models.ForeignKey(
+        Yard,
+        on_delete=models.CASCADE,
+        verbose_name='двор',
+        null=True,
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
+    
+    def __str__(self):
+        return self.auto.auto_number
         
         
 class BlackList(models.Model):

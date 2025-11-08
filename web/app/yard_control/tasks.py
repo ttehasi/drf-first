@@ -4,12 +4,14 @@ from django.utils import timezone
 from .models import (
     BlackList,
     OutHistory,
-    EntryHistory
+    EntryHistory,
+    ConfirmAutoInYard,
+    Yard
 )
 
 
 @shared_task(bind=True, max_retries=3)
-def check_automobile_confirmation(self, automobile_id, yard_id=None):
+def check_automobile_confirmation(self, automobile_id, yards_id=None):
     try:
         from .models import Automobile
         
@@ -17,29 +19,29 @@ def check_automobile_confirmation(self, automobile_id, yard_id=None):
         # получаем автомобиль
         automobile = Automobile.objects.get(id=automobile_id)
         
-        # Подсчет количества дней во дворе
-        days_in_courtyard = calculate_days_in_courtyard(automobile.auto_number, yard_id)
-        
-        
-        if days_in_courtyard >= 11:
-            # Подтверждаем автомобиль
-            automobile.is_confirmed = True
-            automobile.save()
-            result = "confirmed"
-        else:
-            # Удаляем автомобиль
-            auto_number = automobile.auto_number
-            BlackList.objects.create(
-                auto_number=auto_number,
-                yard=yard_id
-            )
-            result = "move to black list"
+        for yard_id in yards_id:
+            # Подсчет количества дней во дворе
+            days_in_courtyard = calculate_days_in_courtyard(automobile.auto_number, yard_id)
+            
+            yard = Yard.objects.get(id=yard_id)
+            
+            confirmed_in_curr_yard = ConfirmAutoInYard.objects.get(yard=yard, auto=automobile)
+            if days_in_courtyard >= 11:
+                # Подтверждаем автомобиль
+                confirmed_in_curr_yard.is_confirmed = True
+                confirmed_in_curr_yard.save()
+            else:
+                # Удаляем автомобиль
+                auto_number = automobile.auto_number
+                BlackList.objects.create(
+                    auto_number=auto_number,
+                    yard=yard
+                )
+                yard.automobiles.remove(automobile)
         
         return {
             'automobile_id': automobile_id,
-            'auto_number': automobile.auto_number if result == "confirmed" else auto_number,
-            'days_in_courtyard': days_in_courtyard,
-            'result': result,
+            'auto_number': automobile.auto_number,
             'checked_at': timezone.now().isoformat()
         }
         

@@ -12,7 +12,8 @@ from .models import(
     OutHistory,
     Yard,
     Automobile,
-    Invite
+    Invite,
+    ConfirmAutoInYard
 )
 
 from app.users.models import (
@@ -214,14 +215,20 @@ class AutomobileCreateAPIView(APIView):
                     auto_number=valid_number,
                     owner=owner,
                     expires_at=timezone.now() + timedelta(days=14),
-                    is_confirmed=False
+                    # is_confirmed=False
                 )
+                
             for yard in current_yards:
                 yard_automobiles = yard.automobiles.all()
                 if automobile in yard_automobiles:
                     return Response({'error': 'Этот автомобиль уже есть в этом дворе'})
 
                 yard.automobiles.add(automobile)
+                ConfirmAutoInYard.objects.create(
+                    auto=automobile,
+                    yard=yard,
+                    is_confirmed=False
+                )
             # except IntegrityError:
             #     return Response({'error': 'Автомобиль с таким номером уже есть'})
             # Создаем задачу проверки через 14 дней

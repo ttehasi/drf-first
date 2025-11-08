@@ -5,9 +5,11 @@ from .models import (
     Invite,
     Automobile,
     EntryHistory,
-    OutHistory
+    OutHistory,
+    ConfirmAutoInYard
 )
 
+from django.utils.html import format_html
 from django.urls import path
 from django.shortcuts import redirect
 from django.contrib import messages
@@ -86,6 +88,7 @@ class AutomobileAdmin(admin.ModelAdmin):
     search_fields = ['auto_number']
     readonly_fields = ['created_at']
     
+    
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         if request.user.is_superuser:
@@ -95,7 +98,8 @@ class AutomobileAdmin(admin.ModelAdmin):
         return qs
     
     def get_list_filter(self, request):
-        list_filter = ['is_confirmed', 'is_guest', 'created_at']
+        self.request = request
+        list_filter = ['is_guest', 'created_at']
         yard_filter = YardAdminFilter(
         request=request,
         params=request.GET.copy(), 
@@ -108,6 +112,31 @@ class AutomobileAdmin(admin.ModelAdmin):
         if choise_count > 1:
             list_filter.insert(0, YardAdminFilter)
         return list_filter
+    
+    def is_confirmed(self, obj):
+        yard_id = self.request.GET.get('yard')
+        if self.choise_count > 1:
+            if not yard_id:
+                return 'Выберете конкретный двор'
+            yard = Yard.objects.get(id=yard_id)
+            confirm = ConfirmAutoInYard.objects.get(auto=obj, yard=yard)
+            if confirm.is_confirmed:
+                return format_html(
+                        '<img src="/static/admin/img/icon-yes.svg" alt="True">'
+                    )
+            return format_html(
+                    '<img src="/static/admin/img/icon-no.svg" alt="False">'
+                )
+        yard = Yard.objects.get(admin=self.request.user)
+        confirm = ConfirmAutoInYard.objects.get(auto=obj, yard=yard)
+        if confirm.is_confirmed:
+            return format_html(
+                    '<img src="/static/admin/img/icon-yes.svg" alt="True">'
+                )
+        return format_html(
+                '<img src="/static/admin/img/icon-no.svg" alt="False">'
+            )
+    is_confirmed.short_description = 'Подтверждена'
     
     def has_module_permission(self, request):
         """Разрешает доступ к модулю в админке"""
