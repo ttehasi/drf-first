@@ -76,14 +76,8 @@ class BlackList(models.Model):
         return self.auto_number
         
         
-        
-class Invite(models.Model):
-    user = models.ForeignKey(
-        'users.User',
-        on_delete=models.PROTECT,
-        related_name='my_invites',
-        verbose_name='кого пригласили',
-    )
+class Invite(models.Model): 
+    user_phone = models.CharField(verbose_name='Телефон пользователя', blank=True)
     yard = models.ForeignKey(
         Yard,
         on_delete=models.PROTECT,
@@ -98,7 +92,7 @@ class Invite(models.Model):
         verbose_name_plural = 'Приглашения'
         
     def __str__(self):
-        return self.user.phone
+        return self.user_phone
     
     
 class EntryHistory(models.Model):

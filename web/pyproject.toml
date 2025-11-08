@@ -20,4 +20,6 @@ dependencies = [
     "celery>=5.5.3",
     "redis>=7.0.0",
     "drf-spectacular>=0.28.0",
+    "pandas>=2.3.3",
+    "openpyxl>=3.1.5",
 ]
