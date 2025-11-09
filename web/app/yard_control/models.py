@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.html import format_html
 
 
 class Automobile(models.Model):
@@ -72,7 +73,8 @@ class ConfirmAutoInYard(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='дата создания')
     
     def __str__(self):
-        return self.auto.auto_number
+        return format_html('<img src="/static/admin/img/icon-yes.svg" alt="True">') if self.is_confirmed \
+            else format_html('<img src="/static/admin/img/icon-no.svg" alt="False">')
         
         
 class BlackList(models.Model):

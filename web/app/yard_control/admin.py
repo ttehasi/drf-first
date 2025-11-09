@@ -9,7 +9,6 @@ from .models import (
     ConfirmAutoInYard
 )
 
-from django.utils.html import format_html
 from django.urls import path
 from django.shortcuts import redirect
 from django.contrib import messages
@@ -120,22 +119,10 @@ class AutomobileAdmin(admin.ModelAdmin):
                 return 'Выберете конкретный двор'
             yard = Yard.objects.get(id=yard_id)
             confirm = ConfirmAutoInYard.objects.get(auto=obj, yard=yard)
-            if confirm.is_confirmed:
-                return format_html(
-                        '<img src="/static/admin/img/icon-yes.svg" alt="True">'
-                    )
-            return format_html(
-                    '<img src="/static/admin/img/icon-no.svg" alt="False">'
-                )
+            return confirm
         yard = Yard.objects.get(admin=self.request.user)
         confirm = ConfirmAutoInYard.objects.get(auto=obj, yard=yard)
-        if confirm.is_confirmed:
-            return format_html(
-                    '<img src="/static/admin/img/icon-yes.svg" alt="True">'
-                )
-        return format_html(
-                '<img src="/static/admin/img/icon-no.svg" alt="False">'
-            )
+        return confirm
     is_confirmed.short_description = 'Подтверждена'
     
     def has_module_permission(self, request):
