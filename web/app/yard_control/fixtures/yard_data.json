@@ -4,7 +4,6 @@
   "pk": 1,
   "fields": {
     "auto_number": "A001AA77",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 2,
     "expires_at": "2025-10-30T19:33:46Z",
@@ -16,7 +15,6 @@
   "pk": 2,
   "fields": {
     "auto_number": "A231AA54",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 3,
     "expires_at": "2025-10-31T08:33:30Z",
@@ -28,7 +26,6 @@
   "pk": 3,
   "fields": {
     "auto_number": "A653SA51",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 4,
     "expires_at": "2025-10-31T08:33:52Z",
@@ -40,7 +37,6 @@
   "pk": 8,
   "fields": {
     "auto_number": "R394FF44",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T08:51:27.567Z",
@@ -52,7 +48,6 @@
   "pk": 11,
   "fields": {
     "auto_number": "R394FF43",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T10:32:02.152Z",
@@ -64,7 +59,6 @@
   "pk": 12,
   "fields": {
     "auto_number": "R394AF43",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T10:46:46.121Z",
@@ -76,7 +70,6 @@
   "pk": 13,
   "fields": {
     "auto_number": "E943AF43",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T10:51:41.917Z",
@@ -88,7 +81,6 @@
   "pk": 15,
   "fields": {
     "auto_number": "E943AF77",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 2,
     "expires_at": "2025-11-06T11:13:00.152Z",
@@ -100,7 +92,6 @@
   "pk": 16,
   "fields": {
     "auto_number": "A001AE77",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 3,
     "expires_at": "2025-11-07T11:13:22.700Z",
@@ -112,7 +103,6 @@
   "pk": 17,
   "fields": {
     "auto_number": "A765TR78",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": "2025-10-25T15:00:00Z",
@@ -124,7 +114,6 @@
   "pk": 18,
   "fields": {
     "auto_number": "A765TR789",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -136,7 +125,6 @@
   "pk": 19,
   "fields": {
     "auto_number": "A765QQ789",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -148,7 +136,6 @@
   "pk": 20,
   "fields": {
     "auto_number": "E332FD77",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -160,7 +147,6 @@
   "pk": 21,
   "fields": {
     "auto_number": "A616AA77",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -172,7 +158,6 @@
   "pk": 22,
   "fields": {
     "auto_number": "A304KF34",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -184,7 +169,6 @@
   "pk": 23,
   "fields": {
     "auto_number": "A204LP34",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -196,7 +180,6 @@
   "pk": 24,
   "fields": {
     "auto_number": "A343SA43",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -208,7 +191,6 @@
   "pk": 25,
   "fields": {
     "auto_number": "A901GE75",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -220,7 +202,6 @@
   "pk": 26,
   "fields": {
     "auto_number": "A555AS22",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -232,7 +213,6 @@
   "pk": 27,
   "fields": {
     "auto_number": "Q666WE777",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -244,7 +224,6 @@
   "pk": 28,
   "fields": {
     "auto_number": "A343SYY3",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -256,7 +235,6 @@
   "pk": 29,
   "fields": {
     "auto_number": "A933EA43",
-    "is_confirmed": false,
     "is_guest": false,
     "owner": 2,
     "expires_at": "2025-10-30T08:33:07Z",
@@ -268,7 +246,6 @@
   "pk": 30,
   "fields": {
     "auto_number": "A952EA43",
-    "is_confirmed": false,
     "is_guest": true,
     "owner": null,
     "expires_at": null,
@@ -359,6 +336,146 @@
     "created_at": "2025-10-25T14:33:16.643Z",
     "users": [],
     "automobiles": []
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 1,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 1,
+    "yard": 1,
+    "created_at": "2025-11-08T15:24:00.837Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 2,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 1,
+    "yard": 2,
+    "created_at": "2025-11-08T15:24:00.864Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 3,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 2,
+    "yard": 1,
+    "created_at": "2025-11-08T15:24:00.868Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 4,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 3,
+    "yard": 2,
+    "created_at": "2025-11-08T15:24:00.871Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 5,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 11,
+    "yard": 1,
+    "created_at": "2025-11-08T15:24:00.875Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 6,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 11,
+    "yard": 2,
+    "created_at": "2025-11-08T15:24:00.877Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 7,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 12,
+    "yard": 1,
+    "created_at": "2025-11-08T15:24:00.881Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 8,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 12,
+    "yard": 2,
+    "created_at": "2025-11-08T15:24:00.883Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 9,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 13,
+    "yard": 1,
+    "created_at": "2025-11-08T15:24:00.887Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 10,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 13,
+    "yard": 2,
+    "created_at": "2025-11-08T15:24:00.889Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 11,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 15,
+    "yard": 1,
+    "created_at": "2025-11-08T15:24:00.892Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 12,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 15,
+    "yard": 2,
+    "created_at": "2025-11-08T15:24:00.894Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 13,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 16,
+    "yard": 1,
+    "created_at": "2025-11-08T15:24:00.897Z"
+  }
+},
+{
+  "model": "yard_control.confirmautoinyard",
+  "pk": 14,
+  "fields": {
+    "is_confirmed": false,
+    "auto": 29,
+    "yard": 3,
+    "created_at": "2025-11-08T15:24:00.907Z"
   }
 },
 {

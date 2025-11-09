@@ -4,7 +4,7 @@
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$1000000$90E4ZKads71ObM7Jnrypz1$nBVgyh4ScinI9DROzzJHhirHOGXcsRgVz4zEsRTVN8U=",
-    "last_login": "2025-10-27T08:32:30.413Z",
+    "last_login": "2025-11-08T16:07:43.748Z",
     "is_superuser": true,
     "first_name": "",
     "last_name": "",
@@ -15,6 +15,7 @@
     "admin": false,
     "phone": "root",
     "created_at": "2025-10-16T19:30:05.188Z",
+    "full_name": "",
     "groups": [],
     "user_permissions": []
   }
@@ -35,6 +36,7 @@
     "admin": false,
     "phone": "89855134415",
     "created_at": "2025-10-16T19:33:20.399Z",
+    "full_name": "",
     "groups": [],
     "user_permissions": []
   }
@@ -55,6 +57,7 @@
     "admin": true,
     "phone": "89685135435",
     "created_at": "2025-10-17T08:30:02.064Z",
+    "full_name": "",
     "groups": [],
     "user_permissions": []
   }
@@ -75,6 +78,7 @@
     "admin": false,
     "phone": "89535634118",
     "created_at": "2025-10-17T08:31:24.920Z",
+    "full_name": "",
     "groups": [],
     "user_permissions": []
   }
@@ -84,7 +88,7 @@
   "pk": 5,
   "fields": {
     "password": "pbkdf2_sha256$1000000$ZoDrZYwlHTVXevD5Vo7B5z$s7vHJnABN18K5st/MeiKFko8ajOupAxFUivWBDYsxvc=",
-    "last_login": "2025-10-27T08:33:56.695Z",
+    "last_login": "2025-11-08T16:07:13.243Z",
     "is_superuser": false,
     "first_name": "Артем",
     "last_name": "Коготь",
@@ -95,6 +99,7 @@
     "admin": true,
     "phone": "fortuna",
     "created_at": "2025-10-25T11:13:56.488Z",
+    "full_name": "",
     "groups": [],
     "user_permissions": []
   }
@@ -115,6 +120,7 @@
     "admin": true,
     "phone": "qwe",
     "created_at": "2025-10-25T14:34:52.850Z",
+    "full_name": "",
     "groups": [],
     "user_permissions": []
   }
