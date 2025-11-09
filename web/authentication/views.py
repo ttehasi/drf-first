@@ -26,36 +26,33 @@ class PhoneLoginView(APIView):
         request=LoginSerializer,
         responses={
             200: OpenApiResponse(
-                response=UserSerializer,
-                description="Успешная аутентификация",
-                examples=[
-                    OpenApiExample(
-                        'Пример успешного ответа',
-                        value={
-                            'access': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
-                            'refresh': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
-                            'user': {
-                                'id': 1,
-                                'phone': '+79991234567',
-                                'full_name': 'Иван Иванов',
-                                'email': 'ivan@example.com'
+                response={
+                    "type": "object",
+                    "properties": {
+                        "access": {"type": "string", "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."},
+                        "refresh": {"type": "string", "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."},
+                        "user": {
+                            "type": "object",
+                            "properties": {
+                                "id": {"type": "integer", "example": 1},
+                                "phone": {"type": "string", "example": "+79991234567"},
+                                "full_name": {"type": "string", "example": "Иван Иванов"},
+                                "email": {"type": "string", "example": "ivan@example.com"}
                             }
                         }
-                    )
-                ]
+                    }
+                },
+                description="Успешная аутентификация"
             ),
             400: OpenApiResponse(
-                response=OpenApiTypes.OBJECT,
-                description="Неверные данные или пользователь не найден",
-                examples=[
-                    OpenApiExample(
-                        'Пример ошибки',
-                        value={
-                            'error': 'Неверный пароль',
-                            'details': {'phone': ['Это поле обязательно.']}
-                        }
-                    )
-                ]
+                response={
+                    "type": "object",
+                    "properties": {
+                        "error": {"type": "string", "example": "Неверные данные"},
+                        "details": {"type": "object"}
+                    }
+                },
+                description="Неверные данные или пользователь не найден"
             )
         },
         examples=[
@@ -66,6 +63,20 @@ class PhoneLoginView(APIView):
                     'password': 'mysecretpassword'
                 },
                 request_only=True
+            ),
+            OpenApiExample(
+                'Пример успешного ответа',
+                value={
+                    'access': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
+                    'refresh': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
+                    'user': {
+                        'id': 1,
+                        'phone': '+79991234567',
+                        'full_name': 'Иван Иванов',
+                        'email': 'ivan@example.com'
+                    }
+                },
+                response_only=True
             )
         ]
     )
@@ -115,36 +126,42 @@ class PhoneRegisterView(APIView):
         request=RegisterSerializer,
         responses={
             201: OpenApiResponse(
-                response=OpenApiTypes.OBJECT,
-                description="Пользователь успешно создан",
-                examples=[
-                    OpenApiExample(
-                        'Пример успешного ответа',
-                        value={
-                            'access': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
-                            'refresh': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
-                            'user': {
-                                'id': 1,
-                                'phone': '+79991234567',
-                                'full_name': 'Иван Иванов',
-                                'email': 'ivan@example.com'
+                response={
+                    "type": "object",
+                    "properties": {
+                        "access": {"type": "string", "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."},
+                        "refresh": {"type": "string", "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."},
+                        "user": {
+                            "type": "object",
+                            "properties": {
+                                "id": {"type": "integer", "example": 1},
+                                "phone": {"type": "string", "example": "+79991234567"},
+                                "full_name": {"type": "string", "example": "Иван Иванов"},
+                                "email": {"type": "string", "example": "ivan@example.com"}
                             }
                         }
-                    )
-                ]
+                    }
+                },
+                description="Пользователь успешно создан"
             ),
             400: OpenApiResponse(
-                response=OpenApiTypes.OBJECT,
-                description="Неверные данные или пользователь уже существует",
-                examples=[
-                    OpenApiExample(
-                        'Пример ошибки',
-                        value={
-                            'error': 'Пользователь с таким номером уже существует',
-                            'details': {'phone': ['Это поле обязательно.']}
-                        }
-                    )
-                ]
+                response={
+                    "type": "object",
+                    "properties": {
+                        "error": {"type": "string", "example": "Неверные данные"},
+                        "details": {"type": "object"}
+                    }
+                },
+                description="Неверные данные или пользователь уже существует"
+            ),
+            500: OpenApiResponse(
+                response={
+                    "type": "object",
+                    "properties": {
+                        "error": {"type": "string", "example": "Ошибка при создании пользователя"}
+                    }
+                },
+                description="Внутренняя ошибка сервера"
             )
         },
         examples=[
@@ -158,6 +175,20 @@ class PhoneRegisterView(APIView):
                     'email': 'ivan@example.com'
                 },
                 request_only=True
+            ),
+            OpenApiExample(
+                'Пример успешного ответа',
+                value={
+                    'access': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
+                    'refresh': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...',
+                    'user': {
+                        'id': 1,
+                        'phone': '+79991234567',
+                        'full_name': 'Иван Иванов',
+                        'email': 'ivan@example.com'
+                    }
+                },
+                response_only=True
             )
         ]
     )
@@ -211,33 +242,31 @@ class ChangePasswordView(APIView):
     @extend_schema(
         summary="Смена пароля",
         description="Изменение пароля текущего аутентифицированного пользователя",
-        request={
-            'type': 'object',
-            'properties': {
-                'current_password': {'type': 'string'},
-                'new_password': {'type': 'string'}
-            }
-        },
+        request=OpenApiTypes.OBJECT,
         responses={
             200: OpenApiResponse(
-                response=OpenApiTypes.OBJECT,
-                description="Пароль успешно изменен",
-                examples=[
-                    OpenApiExample(
-                        'Пример успешного ответа',
-                        value={'message': 'Пароль успешно изменен'}
-                    )
-                ]
+                response={
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string",
+                            "example": "Пароль успешно изменен"
+                        }
+                    }
+                },
+                description="Пароль успешно изменен"
             ),
             400: OpenApiResponse(
-                response=OpenApiTypes.OBJECT,
-                description="Неверные данные или пароль",
-                examples=[
-                    OpenApiExample(
-                        'Пример ошибки',
-                        value={'error': 'Текущий пароль неверен'}
-                    )
-                ]
+                response={
+                    "type": "object", 
+                    "properties": {
+                        "error": {
+                            "type": "string",
+                            "example": "Текущий пароль неверен"
+                        }
+                    }
+                },
+                description="Неверные данные или пароль"
             )
         },
         examples=[
@@ -248,6 +277,20 @@ class ChangePasswordView(APIView):
                     'new_password': 'newpassword456'
                 },
                 request_only=True
+            ),
+            OpenApiExample(
+                'Пример успешного ответа',
+                value={
+                    'message': 'Пароль успешно изменен'
+                },
+                response_only=True
+            ),
+            OpenApiExample(
+                'Пример ошибки',
+                value={
+                    'error': 'Текущий пароль неверен'
+                },
+                response_only=True
             )
         ]
     )
@@ -282,21 +325,36 @@ class LogoutView(APIView):
     @extend_schema(
         summary="Выход из системы",
         description="Выход пользователя из системы с обновлением времени последнего выхода",
+        request=None,
         responses={
             200: OpenApiResponse(
-                response=OpenApiTypes.OBJECT,
-                description="Успешный выход из системы",
-                examples=[
-                    OpenApiExample(
-                        'Пример ответа',
-                        value={
-                            "message": "Successfully logged out",
-                            "logout_time": "2024-01-15T14:30:00+03:00"
+                response={
+                    "type": "object",
+                    "properties": {
+                        "message": {
+                            "type": "string", 
+                            "example": "Successfully logged out"
+                        },
+                        "logout_time": {
+                            "type": "string",
+                            "format": "date-time",
+                            "example": "2024-01-15T14:30:00+03:00"
                         }
-                    )
-                ]
+                    }
+                },
+                description="Успешный выход из системы"
             )
-        }
+        },
+        examples=[
+            OpenApiExample(
+                'Пример ответа',
+                value={
+                    "message": "Successfully logged out",
+                    "logout_time": "2024-01-15T14:30:00+03:00"
+                },
+                response_only=True
+            )
+        ]
     )
     
     def post(self, request):
@@ -312,24 +370,35 @@ class LogoutView(APIView):
 @extend_schema(
     summary="Обновление токена",
     description="Обновление access токена с помощью refresh токена",
-    request={
-        'type': 'object',
-        'properties': {
-            'refresh': {'type': 'string', 'example': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...'}
-        }
-    },
+    request=OpenApiTypes.OBJECT,
     responses={
         200: OpenApiResponse(
-            response=OpenApiTypes.OBJECT,
-            description="Токен успешно обновлен",
-            examples=[
-                OpenApiExample(
-                    'Пример ответа',
-                    value={
-                        'access': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...'
+            response={
+                "type": "object",
+                "properties": {
+                    "access": {
+                        "type": "string",
+                        "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9..."
                     }
-                )
-            ]
+                }
+            },
+            description="Токен успешно обновлен"
+        ),
+        401: OpenApiResponse(
+            response={
+                "type": "object",
+                "properties": {
+                    "detail": {
+                        "type": "string",
+                        "example": "Token is invalid or expired"
+                    },
+                    "code": {
+                        "type": "string", 
+                        "example": "token_not_valid"
+                    }
+                }
+            },
+            description="Неверный refresh токен"
         )
     },
     examples=[
@@ -339,6 +408,21 @@ class LogoutView(APIView):
                 'refresh': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...'
             },
             request_only=True
+        ),
+        OpenApiExample(
+            'Пример успешного ответа',
+            value={
+                'access': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9...'
+            },
+            response_only=True
+        ),
+        OpenApiExample(
+            'Пример ошибки',
+            value={
+                'detail': 'Token is invalid or expired',
+                'code': 'token_not_valid'
+            },
+            response_only=True
         )
     ]
 )
