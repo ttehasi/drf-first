@@ -161,7 +161,7 @@ class CustomUserAdmin(UserAdmin):
     def get_fieldsets(self, request, obj=None):
         if request.user.is_superuser:
             fieldsets = (
-            (_('Personal info'), {'fields': ('full_name', 'email', 'phone')}),
+            (_('Personal info'), {'fields': ('password', 'full_name', 'email', 'phone')}),
             (_('Permissions'), {
                 'fields': ('admin', 'is_active', 'is_staff', 'is_superuser'),
             }),

@@ -172,7 +172,6 @@ class PhoneRegisterView(APIView):
                     'phone': '+79991234567',
                     'password': 'mysecretpassword',
                     'password_confirm': 'mysecretpassword',
-                    'email': 'ivan@example.com'
                 },
                 request_only=True
             ),
@@ -185,7 +184,6 @@ class PhoneRegisterView(APIView):
                         'id': 1,
                         'phone': '+79991234567',
                         'full_name': 'Иван Иванов',
-                        'email': 'ivan@example.com'
                     }
                 },
                 response_only=True
@@ -217,7 +215,6 @@ class PhoneRegisterView(APIView):
                 phone=phone,
                 password=password,
                 full_name=full_name,
-                email=serializer.validated_data.get('email', '')
             )
             
             refresh = RefreshToken.for_user(user)
