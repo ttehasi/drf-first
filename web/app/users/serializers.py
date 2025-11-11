@@ -37,7 +37,6 @@ class YardAddressSerializer(serializers.ModelSerializer):
 
 
 class AccountDetailSerializer(serializers.ModelSerializer):
-    phone = serializers.CharField()
     name = serializers.CharField(source='get_full_name')
     addresses = serializers.SerializerMethodField()
     
@@ -47,15 +46,17 @@ class AccountDetailSerializer(serializers.ModelSerializer):
     
     def get_addresses(self, obj):
         yards = Yard.objects.filter(users=obj)
-        serializer = YardAddressSerializer(yards, many=True, context={'user': obj})
+        addresses = [yard.address for yard in yards]
+        return addresses
+        # serializer = YardAddressSerializer(yards, many=True, context={'user': obj})
         
-        addresses_dict = {}
-        for yard_data in serializer.data:
-            address = yard_data['address']
-            automobiles = [auto['auto_number'] for auto in yard_data['automobiles']]
-            addresses_dict[address] = {'auto_numbers': automobiles, 'yard_id': yard_data['id']}
+        # addresses_dict = {}
+        # for yard_data in serializer.data:
+        #     address = yard_data['address']
+        #     automobiles = [auto['auto_number'] for auto in yard_data['automobiles']]
+        #     addresses_dict[address] = {'auto_numbers': automobiles, 'yard_id': yard_data['id']}
         
-        return addresses_dict
+        # return addresses_dict
 
 
 class GuestEntrySerializer(serializers.ModelSerializer):

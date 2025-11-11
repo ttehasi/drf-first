@@ -14,10 +14,14 @@ from django.db import models
 class AccountDetailView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = AccountDetailSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    
+    def get_object(self, request, *args, **kwargs):
+        return User.objects.get(id=request.user.id)
     
     def retrieve(self, request, *args, **kwargs):
         try:
-            instance = self.get_object()
+            instance = self.get_object(request)
             serializer = self.get_serializer(instance)
             return Response(serializer.data)
         except User.DoesNotExist:
