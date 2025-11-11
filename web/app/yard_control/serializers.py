@@ -47,7 +47,7 @@ class YardSerializer(serializers.ModelSerializer):
 class CombinedHistorySerializer(serializers.Serializer):
     event_type = serializers.CharField()
     created_at = serializers.DateTimeField()
-    # auto = AutomobileSerializer()
+    auto_number = serializers.CharField()
     yard = YardSerializer()
     
     class Meta:
@@ -56,7 +56,7 @@ class CombinedHistorySerializer(serializers.Serializer):
         
 class AutomobileCreateSerializer(serializers.Serializer):
     yard_id = serializers.ListField()
-    auto_number = serializers.CharField()
+    auto = serializers.CharField()
     owner = serializers.IntegerField()
     
     class Meta:
