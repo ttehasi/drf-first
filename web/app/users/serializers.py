@@ -37,7 +37,7 @@ class YardAddressSerializer(serializers.ModelSerializer):
 
 
 class AccountDetailSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source='get_full_name')
+    name = serializers.CharField(source='full_name')
     addresses = serializers.SerializerMethodField()
     
     class Meta:
@@ -46,8 +46,11 @@ class AccountDetailSerializer(serializers.ModelSerializer):
     
     def get_addresses(self, obj):
         yards = Yard.objects.filter(users=obj)
-        addresses = [yard.address for yard in yards]
-        return addresses
+        # addresses = [yard.address for yard in yards]
+        addresses_dict = []
+        for yard in yards:
+            addresses_dict.append({'yard_id':yard.id, 'address':yard.address})
+        return addresses_dict
         # serializer = YardAddressSerializer(yards, many=True, context={'user': obj})
         
         # addresses_dict = {}
