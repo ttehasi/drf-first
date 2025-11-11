@@ -276,11 +276,13 @@ class AutoNumberAPIView(generics.ListAPIView):
             except Yard.DoesNotExist:
                 return Response({'error': 'двор с таким id не найден'})
             
+            black_list = queryset.blacklist_set.all()
+            black_auto = [black.auto_number for black in black_list]
             autos = queryset.automobiles.all()
             response = {
                 'yard_id': yard_id,
                 'count_auto': autos.count(),
-                'auto_numbers': [auto.auto_number for auto in autos]
+                'auto_numbers': [auto.auto_number for auto in autos if auto.auto_number not in black_auto]
             }
             return Response(response)
         queryset = Yard.objects.all()
@@ -289,13 +291,12 @@ class AutoNumberAPIView(generics.ListAPIView):
             black_list = yard.blacklist_set.all()
             black_auto = [black.auto_number for black in black_list]
             autos = yard.automobiles.all()
-            auto = [
-                {
+            auto = {
                     'yard_id': yard.id,
                     'automobiles': [auto.auto_number for auto in autos if auto.auto_number not in black_auto],
                     'yard_auto_count': [auto.auto_number for auto in autos].__len__()
                 }
-            ]
+            # if auto[0]['automobiles']:
             numbers.append(auto)
         response = {
             'count_auto': Automobile.objects.all().count(),
@@ -329,3 +330,33 @@ class AutoDeleteView(APIView):
             auto.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+class UsersAutomobiles(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request, *args, **kwargs):
+        yard_id = request.query_params.get('yard_id')
+        if yard_id:
+            try:
+                yard = Yard.objects.get(id=yard_id)
+            except Yard.DoesNotExist:
+                return Response({'error': 'двор с таким id не найден'})
+            queryset = yard.automobiles.filter(owner=request.user)
+            return Response({
+                'automobiles': [auto.auto_number for auto in queryset],
+                'user_id': request.user.id,
+                'yard_id': yard_id
+            })
+        queryset = Automobile.objects.filter(owner=request.user)
+        response = {
+            'user_id': request.user.id,
+        }
+        automobile = []
+        for auto in queryset:
+            auto = {
+                'yards_id':[yard.id for yard in auto.yards_auto.all()],
+                'auto_number': auto.auto_number
+            }
+            automobile.append(auto)
+        response['automobiles'] = automobile
+        return Response(response)
