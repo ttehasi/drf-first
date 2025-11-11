@@ -7,6 +7,7 @@ from .models import (
 from app.yard_control.models import (
     Yard,
     Automobile,
+    ConfirmAutoInYard
 )
 from django.db.utils import IntegrityError
 from django.utils import timezone
@@ -14,11 +15,11 @@ from django.utils import timezone
 from .tasks import remove_guest_automobile_scheduled
 
 
-class AutomobileSerializer(serializers.ModelSerializer):
+class AutomobileSerializer(serializers.ModelSerializer):    
     class Meta:
         model = Automobile
-        fields = ['auto_number', 'is_confirmed', 'expires_at']
-
+        fields = ['auto_number', 'expires_at']
+        
 
 class YardAddressSerializer(serializers.ModelSerializer):
     automobiles = serializers.SerializerMethodField()
