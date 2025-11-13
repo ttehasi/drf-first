@@ -4,7 +4,6 @@ from rest_framework import permissions
 from rest_framework import status, generics
 from django.db import transaction
 from django.utils import timezone
-from django.db.utils import IntegrityError
 from datetime import datetime, timedelta
 from .tasks import check_automobile_confirmation
 from .models import(
@@ -52,20 +51,24 @@ class CombinedHistoryView(APIView):
         #     out_queryset = out_queryset.filter(auto_id=auto_id)
         
         if auto_number:
-            entry_queryset = entry_queryset.filter(auto__auto_number__icontains=auto_number)
-            out_queryset = out_queryset.filter(auto__auto_number__icontains=auto_number)
+            entry_queryset = entry_queryset.filter(
+                auto__auto_number__icontains=auto_number)
+            out_queryset = out_queryset.filter(
+                auto__auto_number__icontains=auto_number)
         
         if date_from:
             try:
                 date_from = datetime.strptime(date_from, '%Y-%m-%d')
-                entry_queryset = entry_queryset.filter(created_at__gte=date_from)
+                entry_queryset = entry_queryset.filter(
+                    created_at__gte=date_from)
                 out_queryset = out_queryset.filter(created_at__gte=date_from)
             except ValueError:
                 pass
         
         if date_to:
             try:
-                date_to = datetime.strptime(date_to, '%Y-%m-%d') + timedelta(days=1)
+                date_to = datetime.strptime(
+                    date_to, '%Y-%m-%d') + timedelta(days=1)
                 entry_queryset = entry_queryset.filter(created_at__lt=date_to)
                 out_queryset = out_queryset.filter(created_at__lt=date_to)
             except ValueError:
@@ -106,7 +109,10 @@ class CombinedHistoryView(APIView):
         serializer = CombinedHistoryCreateSerializer(data=request.data)
         now = timezone.localtime(timezone.now())
         if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                serializer.errors, 
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         try:
             with transaction.atomic():
@@ -118,7 +124,10 @@ class CombinedHistoryView(APIView):
                     auto = Automobile.objects.get(
                         auto_number=auto_number)
                 except Automobile.DoesNotExist:
-                    return Response({'error': f'Автомобиль с номером {auto_number} не найден'})                
+                    return Response(
+                        {'error': 
+                            f'Автомобиль с номером {auto_number} не найден'}
+                    )             
                 # Получение двора
                 yard_id = serializer.validated_data['yard_id']
                 try:
@@ -132,15 +141,18 @@ class CombinedHistoryView(APIView):
                 if event_type == 'entry':
                     if auto.is_guest:
                         guest = Guest.objects.get(auto_number=auto_number)
-                        guest_entry = GuestEntry.objects.filter(guest=guest,
-                                                             enter_time__isnull=True,
-                                                             entry_timeout__gte=now,
-                                                             yard=yard).first()
+                        guest_entry = GuestEntry.objects.filter(
+                            guest=guest,
+                            enter_time__isnull=True,
+                            entry_timeout__gte=now,
+                            yard=yard).first()
                         if guest_entry:
                             guest_entry.enter_time = now
                             guest_entry.save()
                         else:
-                            return Response({'error': 'Гостевой доступ не найден'})
+                            return Response(
+                                {'error': 'Гостевой доступ не найден'}
+                            )
                     history_entry = EntryHistory.objects.create(
                         yard=yard,
                         auto_number=auto.auto_number
@@ -155,15 +167,18 @@ class CombinedHistoryView(APIView):
                 else:  # exit
                     if auto.is_guest:
                         guest = Guest.objects.get(auto_number=auto_number)
-                        guest_entry = GuestEntry.objects.filter(guest=guest,
-                                                             out_time__isnull=True,
-                                                             entry_timeout__gte=now,
-                                                             yard=yard).first()
+                        guest_entry = GuestEntry.objects.filter(
+                            guest=guest,
+                            out_time__isnull=True,
+                            entry_timeout__gte=now,
+                            yard=yard).first()
                         if guest_entry:
                             guest_entry.out_time = now
                             guest_entry.save()
                         else:
-                            raise ValueError({'error': 'Гостевой доступ не найден'})
+                            raise ValueError(
+                                {'error': 'Гостевой доступ не найден'}
+                            )
                     history_entry = OutHistory.objects.create(
                         yard=yard,
                         auto_number=auto.auto_number
@@ -194,7 +209,8 @@ class UserCombinedHistoryView(APIView):
         date_from = request.query_params.get('date_from')
         date_to = request.query_params.get('date_to')
         
-        user_auto_numbers = Automobile.objects.filter(owner=request.user).values_list('auto_number', flat=True)
+        user_auto_numbers = Automobile.objects.filter(
+            owner=request.user).values_list('auto_number', flat=True)
 
         # Фильтруем историю только по этим автомобилям
         entry_queryset = EntryHistory.objects.filter(
@@ -214,20 +230,24 @@ class UserCombinedHistoryView(APIView):
         #     out_queryset = out_queryset.filter(auto_id=auto_id)
         
         if auto_number:
-            entry_queryset = entry_queryset.filter(auto__auto_number__icontains=auto_number)
-            out_queryset = out_queryset.filter(auto__auto_number__icontains=auto_number)
+            entry_queryset = entry_queryset.filter(
+                auto__auto_number__icontains=auto_number)
+            out_queryset = out_queryset.filter(
+                auto__auto_number__icontains=auto_number)
         
         if date_from:
             try:
                 date_from = datetime.strptime(date_from, '%Y-%m-%d')
-                entry_queryset = entry_queryset.filter(created_at__gte=date_from)
+                entry_queryset = entry_queryset.filter(
+                    created_at__gte=date_from)
                 out_queryset = out_queryset.filter(created_at__gte=date_from)
             except ValueError:
                 pass
         
         if date_to:
             try:
-                date_to = datetime.strptime(date_to, '%Y-%m-%d') + timedelta(days=1)
+                date_to = datetime.strptime(
+                    date_to, '%Y-%m-%d')+ timedelta(days=1)
                 entry_queryset = entry_queryset.filter(created_at__lt=date_to)
                 out_queryset = out_queryset.filter(created_at__lt=date_to)
             except ValueError:
@@ -268,13 +288,12 @@ class AutomobileCreateAPIView(APIView):
     def post(self, request):
         serializer = AutomobileCreateSerializer(data=request.data)
         if serializer.is_valid():
-            # Подготавливаем данные для создания
-            # validated_data['expires_at'] = timezone.now() + timedelta(days=14)
-            # validated_data['is_confirmed'] = False
+
             valid_number = serializer.data['auto_number'].upper()
             # Получаем двор
             try:
-                current_yards = [Yard.objects.get(id=int(i)) for i in serializer.data['yard_id']]
+                current_yards = [Yard.objects.get(id=int(i)) 
+                                 for i in serializer.data['yard_id']]
             except Yard.DoesNotExist:
                 return Response({'error': 'Дворов с таким id нет'})
             
@@ -294,7 +313,9 @@ class AutomobileCreateAPIView(APIView):
             for yard in current_yards:
                 yard_automobiles = yard.automobiles.all()
                 if automobile in yard_automobiles:
-                    return Response({'error': 'Этот автомобиль уже есть в этом дворе'})
+                    return Response(
+                        {'error': 'Этот автомобиль уже есть в этом дворе'}
+                    )
 
                 yard.automobiles.add(automobile)
                 ConfirmAutoInYard.objects.create(
@@ -302,9 +323,6 @@ class AutomobileCreateAPIView(APIView):
                     yard=yard,
                     is_confirmed=False
                 )
-            # except IntegrityError:
-            #     return Response({'error': 'Автомобиль с таким номером уже есть'})
-            # Создаем задачу проверки через 14 дней
             try:
                 task_result = check_automobile_confirmation.apply_async(
                     args=[automobile.id, serializer.data['yard_id']],
@@ -332,7 +350,8 @@ class AutomobileCreateAPIView(APIView):
                     'auto_number': automobile.auto_number,
                     'owner': automobile.owner.id,
                     'add_to_yard_id': serializer.data['yard_id'],
-                    'mess': 'Таска на проверку временного доступа не создана, но авто добавлено'
+                    'mess': 'Таска на проверку временного \
+                        доступа не создана, но авто добавлено'
                 }
                 return Response(response_data, status=status.HTTP_201_CREATED)
         
@@ -355,7 +374,8 @@ class AutoNumberAPIView(generics.ListAPIView):
             response = {
                 'yard_id': yard_id,
                 'count_auto': autos.count(),
-                'auto_numbers': [auto.auto_number for auto in autos if auto.auto_number not in black_auto]
+                'auto_numbers': [auto.auto_number for auto in autos 
+                                 if auto.auto_number not in black_auto]
             }
             return Response(response)
         queryset = Yard.objects.all()
@@ -366,8 +386,10 @@ class AutoNumberAPIView(generics.ListAPIView):
             autos = yard.automobiles.all()
             auto = {
                     'yard_id': yard.id,
-                    'automobiles': [auto.auto_number for auto in autos if auto.auto_number not in black_auto],
-                    'yard_auto_count': [auto.auto_number for auto in autos].__len__()
+                    'automobiles': [auto.auto_number for auto in autos 
+                                    if auto.auto_number not in black_auto],
+                    'yard_auto_count': [auto.auto_number for auto in autos]
+                    .__len__()
                 }
             # if auto[0]['automobiles']:
             numbers.append(auto)
@@ -437,7 +459,10 @@ class AutoDeleteView(APIView):
             auto_number = serializer.validated_data['auto_number']
             auto = Automobile.objects.get(auto_number=auto_number)
             if request.user != auto.owner:
-                return Response({'error': 'Удалять авто может только его владелец'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {'error': 'Удалять авто может только его владелец'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
             auto.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
