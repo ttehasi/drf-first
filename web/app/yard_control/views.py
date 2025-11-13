@@ -193,9 +193,17 @@ class UserCombinedHistoryView(APIView):
         date_from = request.query_params.get('date_from')
         date_to = request.query_params.get('date_to')
         
-        entry_queryset = EntryHistory.objects.select_related('yard') # перделать отдачу только по авто конктерного пользователя
-        out_queryset = OutHistory.objects.select_related('yard')
+        user_auto_numbers = Automobile.objects.filter(owner=request.user).values_list('auto_number', flat=True)
+
+        # Фильтруем историю только по этим автомобилям
+        entry_queryset = EntryHistory.objects.filter(
+            auto_number__in=list(user_auto_numbers)
+        ).select_related('yard').distinct()
         
+        out_queryset = OutHistory.objects.filter(
+            auto_number__in=list(user_auto_numbers)
+        ).select_related('yard').distinct()
+                      
         if yard_id:
             entry_queryset = entry_queryset.filter(yard_id=yard_id)
             out_queryset = out_queryset.filter(yard_id=yard_id)
