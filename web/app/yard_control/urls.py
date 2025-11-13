@@ -5,10 +5,12 @@ from .views import (
     AutoNumberAPIView,
     InviteAPIView,
     AutoDeleteView,
-    UsersAutomobiles
+    UsersAutomobiles,
+    UserCombinedHistoryView
 )
 urlpatterns = [
     path('history/', CombinedHistoryView.as_view(), name='history'),
+    path('user-history/', UserCombinedHistoryView.as_view(), name='user-history'),
     path('add-auto/', AutomobileCreateAPIView.as_view(), name='create-auto'),
     path('auto-numbers/', AutoNumberAPIView.as_view(), name='auto-number'),
     path('invites/', InviteAPIView.as_view(), name='invites'),

@@ -184,12 +184,80 @@ class CombinedHistoryView(APIView):
             )
                 
 
+class UserCombinedHistoryView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+    def get(self, request):
+        yard_id = request.query_params.get('yard_id')
+        # auto_id = request.query_params.get('auto_id')
+        auto_number = request.query_params.get('auto_number')
+        date_from = request.query_params.get('date_from')
+        date_to = request.query_params.get('date_to')
+        
+        entry_queryset = EntryHistory.objects.select_related('yard') # перделать отдачу только по авто конктерного пользователя
+        out_queryset = OutHistory.objects.select_related('yard')
+        
+        if yard_id:
+            entry_queryset = entry_queryset.filter(yard_id=yard_id)
+            out_queryset = out_queryset.filter(yard_id=yard_id)
+        
+        # if auto_id:
+        #     entry_queryset = entry_queryset.filter(auto_id=auto_id)
+        #     out_queryset = out_queryset.filter(auto_id=auto_id)
+        
+        if auto_number:
+            entry_queryset = entry_queryset.filter(auto__auto_number__icontains=auto_number)
+            out_queryset = out_queryset.filter(auto__auto_number__icontains=auto_number)
+        
+        if date_from:
+            try:
+                date_from = datetime.strptime(date_from, '%Y-%m-%d')
+                entry_queryset = entry_queryset.filter(created_at__gte=date_from)
+                out_queryset = out_queryset.filter(created_at__gte=date_from)
+            except ValueError:
+                pass
+        
+        if date_to:
+            try:
+                date_to = datetime.strptime(date_to, '%Y-%m-%d') + timedelta(days=1)
+                entry_queryset = entry_queryset.filter(created_at__lt=date_to)
+                out_queryset = out_queryset.filter(created_at__lt=date_to)
+            except ValueError:
+                pass
+        
+        entry_history = list(entry_queryset)
+        out_history = list(out_queryset)
+        
+        combined_history = []
+        
+        for entry in entry_history:
+            combined_history.append({
+                'id': entry.id,
+                'event_type': 'entry',
+                'created_at': entry.created_at,
+                'auto_number': entry.auto_number,
+                'yard': entry.yard
+            })
+        
+        for out in out_history:
+            combined_history.append({
+                'id': out.id,
+                'event_type': 'exit',
+                'created_at': out.created_at,
+                'auto_number': out.auto_number,
+                'yard': out.yard
+            })
+        
+        combined_history.sort(key=lambda x: x['created_at'], reverse=True)
+        
+        serializer = CombinedHistorySerializer(combined_history, many=True)
+        
+        return Response(serializer.data)
+
+
 class AutomobileCreateAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     def post(self, request):
         serializer = AutomobileCreateSerializer(data=request.data)
-        # if serializer.is_valid():
-        #     return Response({'ee': 12})
-        # return Response({121: serializer.error_messages})
         if serializer.is_valid():
             # Подготавливаем данные для создания
             # validated_data['expires_at'] = timezone.now() + timedelta(days=14)
@@ -201,11 +269,7 @@ class AutomobileCreateAPIView(APIView):
             except Yard.DoesNotExist:
                 return Response({'error': 'Дворов с таким id нет'})
             
-            # Получаем владельца
-            try:
-                owner = User.objects.get(id=serializer.data['owner'])
-            except User.DoesNotExist:
-                Response({'error': 'Владелец с таким id не найден'})
+            owner = request.user
             
             # Создаем или получаем авто
             try:
@@ -214,8 +278,8 @@ class AutomobileCreateAPIView(APIView):
                 automobile = Automobile.objects.create(
                     auto_number=valid_number,
                     owner=owner,
-                    expires_at=timezone.now() + timedelta(days=14),
-                    # is_confirmed=False
+                    expires_at=timezone.localtime(timezone.now())
+                    + timedelta(days=14),
                 )
                 
             for yard in current_yards:
@@ -320,13 +384,19 @@ class InviteAPIView(APIView):
         serializer = InviteGetSerializer(invites, many=True)
         return Response(serializer.data)
     
+    # def post(self, request, *args, **kwargs):
+        # принять или отклонить приглашение
+    
     
 class AutoDeleteView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
     def delete(self, request, *args, **kwargs):
         serializer = DeleteAutoSerializer(data=request.data)
         if serializer.is_valid():
             auto_number = serializer.validated_data['auto_number']
             auto = Automobile.objects.get(auto_number=auto_number)
+            if request.user != auto.owner:
+                return Response({'error': 'Удалять авто может только его владелец'}, status=status.HTTP_400_BAD_REQUEST)
             auto.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

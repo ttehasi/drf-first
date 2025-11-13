@@ -56,12 +56,12 @@ class CombinedHistorySerializer(serializers.Serializer):
         
 class AutomobileCreateSerializer(serializers.Serializer):
     yard_id = serializers.ListField()
-    auto = serializers.CharField()
-    owner = serializers.IntegerField()
+    auto_number = serializers.CharField()
+    # owner = serializers.IntegerField()
     
     class Meta:
         # model = Automobile
-        fields = ['auto_number', 'owner', 'yard_id']
+        fields = ['auto_number', 'yard_id']
 
     # def validate_auto_number(self, value):
     #     if not value:
