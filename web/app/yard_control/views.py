@@ -28,7 +28,8 @@ from .serializers import (
     AutomobileCreateSerializer,
     CombinedHistoryCreateSerializer,
     InviteGetSerializer,
-    DeleteAutoSerializer
+    DeleteAutoSerializer,
+    InvitePostSerializer
 )
 
 class CombinedHistoryView(APIView):
@@ -392,8 +393,40 @@ class InviteAPIView(APIView):
         serializer = InviteGetSerializer(invites, many=True)
         return Response(serializer.data)
     
-    # def post(self, request, *args, **kwargs):
-        # принять или отклонить приглашение
+    # принять или отклонить приглашение
+    def post(self, request, *args, **kwargs):
+        serializer = InvitePostSerializer(data=request.data)
+        if serializer.is_valid():
+            try:
+                yard = Yard.objects.get(
+                    id=serializer.validated_data.get('yard_id'),
+                )
+            except Yard.DoesNotExist:
+                return Response({'error': 'Двор с таким id не найден'})
+            try:
+                invite = Invite.objects.get(
+                    yard=yard,
+                    user_phone=request.user.phone
+                )
+            except Invite.DoesNotExist:
+                return Response({'error': 'Такое приглашение не найденно'})
+            if serializer.validated_data.get('type') == 'accept':
+                yard.users.add(request.user)
+                invite.delete()
+                response = {
+                    'user_id': request.user.id,
+                    'type': serializer.validated_data.get('type'),
+                    'status': 'success add'
+                }
+            else:
+                invite.delete()
+                response = {
+                    'user_id': request.user.id,
+                    'type': serializer.validated_data.get('type'),
+                    'status': 'success reject'
+                }
+            return Response(response, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     
 class AutoDeleteView(APIView):

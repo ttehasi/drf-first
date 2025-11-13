@@ -108,9 +108,19 @@ class InviteGetSerializer(serializers.ModelSerializer):
         
         
 class DeleteAutoSerializer(serializers.Serializer):
-    auto_number = serializers.CharField(max_length=20)
+    auto_number = serializers.CharField()
     
     def validate_auto_number(self, value):
         if not Automobile.objects.filter(auto_number=value).exists():
             raise serializers.ValidationError("Автомобиль с таким номером не найден")
+        return value
+    
+
+class InvitePostSerializer(serializers.Serializer):
+    type = serializers.CharField()
+    yard_id = serializers.IntegerField()
+    
+    def validate_type(self, value):
+        if not value  in ['accept', 'reject']:
+            return serializers.ValidationError('Тип запроса должен быть accept или reject')
         return value

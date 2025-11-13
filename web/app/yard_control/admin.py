@@ -16,7 +16,7 @@ import pandas as pd
 import csv
 import io
 
-from app.users.models import GuestEntry
+from app.users.models import GuestEntry, User
 
 
 class YardAdminFilter(admin.SimpleListFilter):
@@ -275,7 +275,17 @@ class InviteAdmin(admin.ModelAdmin):
                     io_string = io.StringIO(file_data)
                     reader = csv.DictReader(io_string)
                     err_mess = 0
-                    
+                    for row in reader:
+                        try:
+                            user = User.objects.get(phone=row.get('Телефон'))
+                            if user in yard.users.all():
+                                err_mess += 1
+                                messages.error(request, f"Пользователь с телефоном \
+                                           {row.get('Телефон')} уже есть во дворе {yard.address}")
+                        except User.DoesNotExist:
+                            pass
+                    if err_mess:
+                        return redirect('..')
                     for row in reader:
                         try:
                             inv = Invite.objects.get(yard=yard, user_phone=row.get('Телефон'))
@@ -294,6 +304,17 @@ class InviteAdmin(admin.ModelAdmin):
                     # Excel
                     err_mess = 0
                     df = pd.read_excel(uploaded_file)
+                    for index, row in df.iterrows():
+                        try:
+                            user = User.objects.get(phone=row.get('Телефон'))
+                            if user in yard.users.all():
+                                err_mess += 1
+                                messages.error(request, f"Пользователь с телефоном \
+                                           {row.get('Телефон')} уже есть во дворе {yard.address}")
+                        except User.DoesNotExist:
+                            pass
+                    if err_mess:
+                        return redirect('..')
                     for index, row in df.iterrows():
                         try:
                             inv = Invite.objects.get(yard=yard, user_phone=row.get('Телефон'))

@@ -101,7 +101,7 @@ class Invite(models.Model):
     user_phone = models.CharField(verbose_name='Телефон пользователя', blank=True)
     yard = models.ForeignKey(
         Yard,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='invites',
         verbose_name='в какой двор приглашение',
     )
