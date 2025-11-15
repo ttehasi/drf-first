@@ -21,6 +21,8 @@ from app.users.models import (
     Guest
 )
 
+from app.users.serializers import UserSerializer
+
 from .serializers import (
     CombinedHistorySerializer,
     AutomobileNumberSerializer,
@@ -411,8 +413,9 @@ class InviteAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def get(self, request, *args, **kwargs):
-        invites = Invite.objects.filter(user=request.user)
+        invites = Invite.objects.filter(user_phone=request.user.phone)
         serializer = InviteGetSerializer(invites, many=True)
+        serializer.data[0]['user'] = UserSerializer(request.user).data
         return Response(serializer.data)
     
     # принять или отклонить приглашение

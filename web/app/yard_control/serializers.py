@@ -100,11 +100,10 @@ class AutomobileNumberSerializer(serializers.ModelSerializer):
         
         
 class InviteGetSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
     yard = YardSerializer()
     class Meta:
         model = Invite
-        fields = ['id', 'user', 'yard', 'created_at']
+        fields = ['id', 'yard', 'created_at']
         
         
 class DeleteAutoSerializer(serializers.Serializer):
