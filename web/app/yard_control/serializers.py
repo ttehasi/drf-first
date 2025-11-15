@@ -9,6 +9,9 @@ from .models import (
 
 from app.users.serializers import UserSerializer
 
+from app.users.models import User
+
+
 class AutomobileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Automobile
@@ -101,9 +104,14 @@ class AutomobileNumberSerializer(serializers.ModelSerializer):
         
 class InviteGetSerializer(serializers.ModelSerializer):
     yard = YardSerializer()
+    user = serializers.SerializerMethodField()
+    
     class Meta:
         model = Invite
-        fields = ['id', 'yard', 'created_at']
+        fields = ['id', 'user', 'yard', 'created_at']
+        
+    def get_user(self, obj):
+        return UserSerializer(User.objects.get(phone=obj.user_phone)).data
         
         
 class DeleteAutoSerializer(serializers.Serializer):

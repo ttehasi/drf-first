@@ -415,7 +415,6 @@ class InviteAPIView(APIView):
     def get(self, request, *args, **kwargs):
         invites = Invite.objects.filter(user_phone=request.user.phone)
         serializer = InviteGetSerializer(invites, many=True)
-        serializer.data[0]['user'] = UserSerializer(request.user).data
         return Response(serializer.data)
     
     # принять или отклонить приглашение
