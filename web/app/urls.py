@@ -30,7 +30,8 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/users/', include('app.users.urls')),
-    path('api/yard/', include('app.yard_control.urls')),
+    path('api/users/', include('app.users.urls')),
+    path('api/feedback/', include('app.feedback.urls')),
     
     # Документация
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

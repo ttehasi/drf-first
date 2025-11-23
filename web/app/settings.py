@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # приложения
     'app.users',
     'app.yard_control',
+    'app.feedback',
     'authentication'
 ]
 
